@@ -1,0 +1,4 @@
+import os
+os.system('cls')
+nome = (input("qual seu nome?"))
+print ("bem vindo", nome)
