@@ -10,7 +10,7 @@ peso = 75.5
 doador = True
 complexo = 3j
 PI = 3.14
-print('\033[31mtipos declarados:\033[0m')
+print('\033[32mtipos declarados:\033[0m')
 print('a variavel mome é do tipo:' , type(nome))
 print('a variavel nascimento é do tipo:' , type(nascimento))
 print('a variavel altura é do tipo:' , type(altura))
