@@ -22,6 +22,4 @@ print(f"nota 01| {nota1} |nota 02| {nota2}| ")
 print(f"nota 03| {nota3} |nota 04| {nota4}| ")
 print(f"  total| {soma} |media errada| {media}| ")
 print(f"media correta| {media_correta} ")
-print(
-
-)
+print()
