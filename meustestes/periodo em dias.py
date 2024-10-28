@@ -13,3 +13,7 @@ data_fim = datetime.now()
 
 diferenca = data_fim - data_inicio
 print(f"O período entre a data de início e hoje é de {diferenca.days} dias.")
+
+#novo
+#idade = diferenca/365.2
+#print(f"sua idade é.: {idade}")
