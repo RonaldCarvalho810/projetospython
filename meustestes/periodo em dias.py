@@ -16,4 +16,5 @@ print(f"O período entre a data de início e hoje é de {diferenca.days} dias.")
 
 #novo
 #idade = diferenca/365.2
-#print(f"sua idade é.: {idade}")
+idade = diferenca.days / 365.2
+print(f"sua idade é.: {idade:.2f}")

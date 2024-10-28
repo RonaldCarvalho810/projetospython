@@ -1,6 +1,6 @@
 #Elabore um programa que peça as dimensões de um retângulo e calcule seu perímetro.
 
-#importando blibioteca
+#importando blibioteca / modulo
 import os
 
 #limpando terminal
