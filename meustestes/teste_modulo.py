@@ -1,5 +1,5 @@
 
-import meustestes.meu_Modulo_media as meu_Modulo_media
+import media.meu_Modulo_media as meu_Modulo_media
 
 numeros = [10, 20, 30, 40, 50]
 
