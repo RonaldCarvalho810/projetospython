@@ -1,7 +1,8 @@
+import meu_modulo_media
 
-import media.meu_Modulo_media as meu_Modulo_media
-
+# Exemplo de lista de números
 numeros = [10, 20, 30, 40, 50]
 
-media = meu_Modulo_media.calcular_media(numeros)
+# Calculando a média usando o módulo criado
+media = meu_modulo_media.calcular_media(numeros)
 print(f"A média dos números é: {media:.2f}")

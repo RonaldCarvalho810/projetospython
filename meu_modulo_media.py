@@ -1,5 +1,3 @@
-# calculos.py
-
 def calcular_media(numeros):
     """
     Calcula a média de uma lista de números.
