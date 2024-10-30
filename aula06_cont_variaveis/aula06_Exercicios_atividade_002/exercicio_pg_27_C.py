@@ -17,9 +17,9 @@ velocidade =int(input("digite a velocidade do veiculo..:"))
 
 #conferindo se a velocidade entra dentro do permitido
 if (velocidade < 60):
-    situacao = " o veiculo esta abaixo do limite"
+    situacao = " contiune dirigindo com seurança"
 elif (velocidade == 60):
-    situacao = "veiculo está no limite da pista"
+    situacao = "Atenção: vc atingiu o limite de velocidade da pista"
 
 else:
     situacao = "o veiculo esta acima do limite"

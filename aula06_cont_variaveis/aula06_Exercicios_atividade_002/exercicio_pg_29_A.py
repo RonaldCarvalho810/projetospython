@@ -7,7 +7,7 @@ print("=" * 20)
 print("modulo para conferir a existencia de um triangulo..:")
 print("=" * 20)
 
-#definindo valores das mariaveis
+#atribuindo valores das mariaveis
 lado1 = 0
 lado2 = 0
 lado3 = 0
