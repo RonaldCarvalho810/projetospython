@@ -25,7 +25,7 @@ primeira_raiz = (-(b) + (delta **(1/2) )) / 2*a
 segunda_raiz = (-(b) - (delta **(1/2) )) / 2*a
 
 print("=" * 20)
-print("resultado")
+
 print("=" * 20)
 print(f"as raizes da equação..: (x²-6x+5=0) são  x¹={primeira_raiz} e x²={segunda_raiz} ")
 print("=" * 20)
