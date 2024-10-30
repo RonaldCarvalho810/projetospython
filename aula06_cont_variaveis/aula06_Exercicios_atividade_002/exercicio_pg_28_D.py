@@ -17,7 +17,7 @@ salario_base = 0
 salario_final = 0
 
 
-salario_base = float(input("digite a velocidade do veiculo..:"))
+salario_base = float(input("digite o valor do salario base..:"))
 
 if (salario_base<=0):
     salario_base = float(input("valor de salario nao pode ser igual ou infeior a zero, favor inserir novamente..:"))
