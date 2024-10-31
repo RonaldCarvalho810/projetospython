@@ -1,0 +1,25 @@
+import math
+
+#potencia
+print("=" *20)
+a= int(input("digite o numero a ser a base da potencia"))
+b = int(input("digite o numero a ser o expoente da potencia"))
+total = math.pow(a,b)
+
+print(f"o numero.: {a} elevado ao expoente.: {b} terá como resultado: {total}" )
+print("=" *20)
+
+radicando = int(input("digite o radicando." ))
+resultado_raiz = math.sqrt(radicando)
+
+print(f"a raiz quadrada de.: {radicando} é.: {resultado_raiz}")
+print("=" *20)
+numero = float(input("digite o numero a ser arredondado." ))
+resultado_numero_p_cima = math.ceil(numero)
+resultado_numero_p_baixo = math.floor(numero)
+
+resultado_pelo_round = round(numero)
+print(f"O arredondamento do numero.:  {numero} é.: {resultado_numero_p_cima} se \
+arredondado pra cima e .:{resultado_numero_p_baixo } se \
+arredondado pra baixo e.:{resultado_pelo_round} se feito de forma padrão")
+print("=" *20)
