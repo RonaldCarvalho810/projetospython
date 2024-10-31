@@ -1,4 +1,4 @@
-# criando modulo teste para calcular media
+#modulo para calcular media
 
 def calcular_media(numeros):
 

@@ -1,3 +1,4 @@
+#testeando função juros compostos
 import os
 import meu_modulo_juros_compostos
 
@@ -9,5 +10,5 @@ juros = float(input("digite o juros mensal da aplicação..: "))
 
 montante_final = meu_modulo_juros_compostos.juros_compostos(investimento, periodo, juros)
 
-print(f" o valor desse investimento..: {montante_final:.2f}")
+print(f" o valor final desse investimento será..: {montante_final:.2f}")
 

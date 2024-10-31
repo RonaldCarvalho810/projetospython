@@ -1,4 +1,4 @@
-# testando função
+# testando função media
 
 import meu_modulo_media
 
