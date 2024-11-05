@@ -15,6 +15,11 @@ print(f"frase original.: {frase1}")
 print(f"frase nova.: {minusculas}")
 print("=" *20)
 
+maiusculas = frase1.upper()
+print(f"frase original.: {frase1}")
+print(f"frase nova.: {maiusculas}")
+print("=" *20)
+
 capitalizada = frase1.capitalize()
 print(f"frase original.: {frase1}")
 print(f"frase nova.: {capitalizada}")
