@@ -7,7 +7,7 @@ from rich import print
 
 os.system("cls")
 
-numero = random.randint(1,20)
+numero = random.randint(1,50)
 numero_usuario = int(input("digite um numero entre 1 e 50..: "))
 
 print("=" *20)
