@@ -23,7 +23,7 @@ Variavel_lista = frase.split(" ")
 
 print(Variavel_lista)
 #print(f"posicao = {posicao}")
-segunda_palavra = len(Variavel_lista(1))
+segunda_palavra = len(Variavel_lista[1])
 
 print(f"a frase.: {frase}") 
 print(f"a frase em maiusculo.: {frase_maiusculo}")
