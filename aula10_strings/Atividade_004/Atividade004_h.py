@@ -20,7 +20,7 @@ nome = input("digite o nome.: ")
 letras_nome = len(nome)
 quantidade_o = nome.count("o")
 lista_letras = list(nome)
-posicao_primeiro_o = nome.find("o")
+posicao_primeiro_o = nome.find("o") +1
 invertida = nome[::-1]
 posicao_ultimo_o = invertida.find("o") + letras_nome
 
