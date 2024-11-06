@@ -14,7 +14,10 @@ centena = 0
 milhar = 0
 
 #atribuindo variaveis
-numero = str(input("digite um numero inteiro.: "))
+numero = str(input("digite um numero inteiro, entre 1 e 9999.: "))
+
+if(int(len(numero))>4):
+    print("numero fora da range de calculo")
 
 #conferindo quantos numeros tem
 quantidade_numeros = len(numero)
@@ -39,11 +42,6 @@ elif(quantidade_numeros == 4 ):
     dezena = numero[2]
     centena = numero[1]
     milhar = numero[0]
-
-
-#teste
-#print (unidade)
-#print (tamanho_nome)
 
 #saida dos dados
 print("=" *20)
