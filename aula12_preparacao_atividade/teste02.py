@@ -1,6 +1,9 @@
 import os
+import random
 os.system("cls")
 
+#inicio freeze
+'''
 def gerar_escala_formatada(texto):
     # Criar uma lista para armazenar os índices
     indices = []
@@ -31,3 +34,32 @@ linha_dezenas, linha_unidades, linha_texto = gerar_escala_formatada(texto)
 print(linha_dezenas)
 print(linha_unidades)
 print(linha_texto)
+'''
+#termino freeze
+
+#continuando o teste
+
+numero = 0
+numero2 = 0
+
+nome = input("digite seu nome>: ")
+variavel_dividida = list(nome)
+meio = len(variavel_dividida)// 2
+
+print(variavel_dividida)
+print(meio)
+print(variavel_dividida[meio])
+
+numero = random.randint(1,25)
+numero2 = random.uniform(1,25)
+
+chave = "jose" in nome
+
+if(chave == True):
+    print("existe")
+
+else:
+    print("inexistente")
+print(numero)
+print(f"{numero2: .2f}")
+
