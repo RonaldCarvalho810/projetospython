@@ -9,7 +9,7 @@ def calcular():
     try:
         # Coleta os valores dos campos de entrada
         investimento = float(entry_investimento.get())
-        juros = float(entry_juros.get()) / 100  # Converte a taxa de juros para decimal
+        juros = float(entry_juros.get())  # Converte a taxa de juros para decimal
         periodo = int(entry_periodo.get())
 
         # Chama a função do módulo para calcular os juros compostos
