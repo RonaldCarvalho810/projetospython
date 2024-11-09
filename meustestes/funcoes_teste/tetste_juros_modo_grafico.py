@@ -1,25 +1,22 @@
 import tkinter as tk
 from tkinter import messagebox
-
-# Importe a função de cálculo de juros compostos do seu módulo
 from meu_modulo_juros_compostos import juros_compostos
 
-# Função de cálculo com validação de entrada
+# Função de cálculo sem os prints de conferência
 def calcular():
     try:
-        # Coleta os valores dos campos de entrada
+        # Coletando e convertendo os valores dos campos de entrada
         investimento = float(entry_investimento.get())
-        juros = float(entry_juros.get())  # Converte a taxa de juros para decimal
-        periodo = int(entry_periodo.get())
+        juros = float(entry_juros.get())
+        periodo = int(entry_periodo.get())  # Em meses
 
-        # Chama a função do módulo para calcular os juros compostos
-        montante = juros_compostos(investimento, juros, periodo)
-        
-        # Exibe o resultado em uma caixa de mensagem
-        messagebox.showinfo("Resultado", f"Montante final: R$ {montante:.2f}")
+        # Calculando o montante usando a função do módulo
+        montante = juros_compostos(investimento, periodo, juros)
+
+        # Exibindo o resultado na interface
+        messagebox.showinfo("Resultado", f"Montante final: R$ {montante:,.2f}")
 
     except ValueError:
-        # Exibe uma mensagem de erro se a entrada for inválida
         messagebox.showerror("Erro", "Por favor, insira valores numéricos válidos.")
 
 # Configuração da janela principal
@@ -35,7 +32,7 @@ tk.Label(root, text="Taxa de Juros (%):").grid(row=1, column=0, padx=10, pady=5,
 entry_juros = tk.Entry(root)
 entry_juros.grid(row=1, column=1, padx=10, pady=5)
 
-tk.Label(root, text="Período (anos):").grid(row=2, column=0, padx=10, pady=5, sticky="e")
+tk.Label(root, text="Período (meses):").grid(row=2, column=0, padx=10, pady=5, sticky="e")
 entry_periodo = tk.Entry(root)
 entry_periodo.grid(row=2, column=1, padx=10, pady=5)
 
