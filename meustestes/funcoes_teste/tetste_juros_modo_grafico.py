@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 
-# Importe a função de cálculo de juros compostos do seu módulo
+# Importando a função de cálculo de juros compostos do módulo
 from meu_modulo_juros_compostos import juros_compostos
 
 # Função de cálculo com validação de entrada
