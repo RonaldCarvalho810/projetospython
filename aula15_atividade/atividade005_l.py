@@ -11,6 +11,7 @@ if (senha != usuario[0:3]):
     status = "incorreto"
 else:
     status = "autorizado"
+    print("sistema conectado!!!")
 #print(status)
 while (status == "incorreto"):
     
