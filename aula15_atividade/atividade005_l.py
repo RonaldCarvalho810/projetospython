@@ -6,12 +6,12 @@ os.system("cls")
 usuario = str(input("digite seu cpf.:  "))
 senha = str(input("digite sua senha.: "))
 teste = usuario[0:3]
-print(teste)
+#print(teste)
 if (senha != usuario[0:3]): 
     status = "incorreto"
 else:
     status = "autorizado"
-print(status)
+#print(status)
 while (status == "incorreto"):
     
     print("usuario ou senha incorretos")
