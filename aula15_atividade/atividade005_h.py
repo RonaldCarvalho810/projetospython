@@ -7,7 +7,7 @@ os.system("cls")
 
 inicio = int(input("digite o numero inicial.: "))
 final = int(input("digite o numero final.: "))
-ignorar = input("digite 3 numeros para serem ignorados (exemplo: 5-7-9)")
+ignorar = input("digite 3 numeros para serem ignorados (exemplo: 5-7-9).: ")
 for var_a in range (inicio, final+1):
     if (str(var_a) in ignorar):
         continue
