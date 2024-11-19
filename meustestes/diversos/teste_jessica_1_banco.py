@@ -14,14 +14,12 @@ produtos = {
 
 #print(produtos)
 
-# Procurar por um produto específico pelo código
 nome_procurado = input("Digite o código do produto: ")
 
 if nome_procurado in produtos:
     produto = produtos[nome_procurado]
     print(f"Encontrado: Código: {nome_procurado}, Produto: {produto['produto']}, Preço: R${produto['preco']:.2f}, Estoque: {produto['estoque']}")
     
-    # Perguntar se deseja alterar o estoque
     alterar_estoque = input("Deseja alterar o estoque? (s/n): ").lower()
     
     if alterar_estoque == "s":
@@ -29,7 +27,6 @@ if nome_procurado in produtos:
             quantidade = int(input("Digite a quantidade para ajustar (+ para adicionar, - para remover): "))
             novo_estoque = produto["estoque"] + quantidade
             
-            # Validar se o estoque não ficará negativo
             if novo_estoque < 0:
                 print("Erro: o estoque não pode ficar negativo!")
             else:
