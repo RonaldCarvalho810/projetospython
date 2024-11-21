@@ -20,7 +20,8 @@ if busca_numero in numeros:
     print(quantidade)
     for interno in range (0,quantidade): 
         indice = numeros.index(busca_numero)
-        posicoes.insert(0,indice)
+        if(numeros[indice] == busca_numero):
+            posicoes.insert(0,indice)
     print(f"O número {busca_numero} está nos índices {posicoes}.")
 else:
     #print(posicoes)
