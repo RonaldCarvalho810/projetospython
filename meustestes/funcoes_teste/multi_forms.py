@@ -2,13 +2,11 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import os
 
-# Tema escuro - Configuração de estilos
 def configurar_tema_escuro(root):
     style = ttk.Style(root)
-    root.configure(bg="#1E1E1E")  # Fundo principal
+    root.configure(bg="#1E1E1E") 
     style.theme_use("clam")
     
-    # Configurações de estilo
     style.configure("TLabel", background="#1E1E1E", foreground="#FFFFFF", font=("Arial", 12))
     style.configure("TButton", background="#444444", foreground="#FFFFFF", font=("Arial", 12), padding=6)
     style.map("TButton", background=[("active", "#555555")])
@@ -16,7 +14,6 @@ def configurar_tema_escuro(root):
     style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333", font=("Arial", 10))
     style.configure("Treeview.Heading", background="#444444", foreground="#FFFFFF", font=("Arial", 12))
 
-# Salvar informações em arquivos
 def salvar_em_arquivo(nome_arquivo, dados):
     try:
         with open(nome_arquivo, "a") as arquivo:
@@ -25,7 +22,6 @@ def salvar_em_arquivo(nome_arquivo, dados):
     except Exception as e:
         messagebox.showerror("Erro", f"Não foi possível salvar os dados.\n{e}")
 
-# Formulário de cadastro de clientes
 def abrir_formulario_clientes():
     form_clientes = tk.Toplevel()
     form_clientes.title("Cadastro de Clientes")
@@ -53,7 +49,6 @@ def abrir_formulario_clientes():
     ttk.Button(form_clientes, text="Salvar", command=salvar_cliente).pack(pady=20)
     ttk.Button(form_clientes, text="Fechar", command=form_clientes.destroy).pack(pady=10)
 
-# Formulário de serviços oferecidos
 def abrir_formulario_servicos():
     form_servicos = tk.Toplevel()
     form_servicos.title("Serviços Oferecidos")
@@ -81,7 +76,6 @@ def abrir_formulario_servicos():
     ttk.Button(form_servicos, text="Salvar", command=salvar_servico).pack(pady=20)
     ttk.Button(form_servicos, text="Fechar", command=form_servicos.destroy).pack(pady=10)
 
-# Carregar agendamentos do arquivo
 def carregar_agendamentos(nome_arquivo="agendamentos.txt"):
     if not os.path.exists(nome_arquivo):
         return []
@@ -93,14 +87,12 @@ def carregar_agendamentos(nome_arquivo="agendamentos.txt"):
         messagebox.showerror("Erro", f"Não foi possível carregar os dados.\n{e}")
         return []
 
-# Formulário de agendamento de serviços com grid
 def abrir_formulario_agendamento():
     form_agendamento = tk.Toplevel()
     form_agendamento.title("Agendamento de Serviços")
-    form_agendamento.geometry("600x500")
+    form_agendamento.geometry("800x600")
     configurar_tema_escuro(form_agendamento)
 
-    # Campos de entrada
     ttk.Label(form_agendamento, text="Nome do Cliente:").pack(pady=5)
     entrada_cliente = ttk.Entry(form_agendamento, width=30)
     entrada_cliente.pack(pady=5)
@@ -113,7 +105,6 @@ def abrir_formulario_agendamento():
     entrada_data = ttk.Entry(form_agendamento, width=30)
     entrada_data.pack(pady=5)
 
-    # Tabela para exibir os agendamentos
     tabela = ttk.Treeview(
         form_agendamento, 
         columns=("Cliente", "Serviço", "Data"), 
@@ -122,7 +113,6 @@ def abrir_formulario_agendamento():
     )
     tabela.pack(pady=20, fill="both", expand=True)
 
-    # Configuração das colunas
     tabela.heading("Cliente", text="Cliente")
     tabela.heading("Serviço", text="Serviço")
     tabela.heading("Data", text="Data")
@@ -130,16 +120,14 @@ def abrir_formulario_agendamento():
     tabela.column("Serviço", width=200)
     tabela.column("Data", width=100)
 
-    # Função para atualizar a tabela
     def atualizar_tabela():
-        tabela.delete(*tabela.get_children())  # Limpar tabela
+        tabela.delete(*tabela.get_children())  
         agendamentos = carregar_agendamentos()
         for agendamento in agendamentos:
             dados = agendamento.split(", ")
             if len(dados) == 3:
                 tabela.insert("", "end", values=(dados[0][8:], dados[1][8:], dados[2][6:]))
 
-    # Função para salvar novo agendamento
     def salvar_agendamento():
         cliente = entrada_cliente.get().strip()
         servico = entrada_servico.get().strip()
@@ -150,18 +138,15 @@ def abrir_formulario_agendamento():
             entrada_cliente.delete(0, tk.END)
             entrada_servico.delete(0, tk.END)
             entrada_data.delete(0, tk.END)
-            atualizar_tabela()  # Atualizar tabela com novo agendamento
+            atualizar_tabela()  
         else:
             messagebox.showwarning("Atenção", "Preencha todos os campos.")
 
-    # Botões
     ttk.Button(form_agendamento, text="Salvar", command=salvar_agendamento).pack(pady=10)
     ttk.Button(form_agendamento, text="Fechar", command=form_agendamento.destroy).pack(pady=10)
 
-    # Inicializar tabela com dados
     atualizar_tabela()
 
-# Tela principal
 def main():
     root = tk.Tk()
     root.title("Gerenciamento de Serviços")
