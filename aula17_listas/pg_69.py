@@ -16,15 +16,15 @@ for num_str in numeros_str:
 busca_numero = int(input("Digite o número que deseja encontrar: "))
 
 if busca_numero in numeros:
-    quantidade  = numeros.count(busca_numero)
-    print(quantidade)
-    for interno in range (0,quantidade): 
-        indice = numeros.index(busca_numero)
-        if(numeros[indice] == busca_numero):
-            posicoes.insert(0,indice)
+    quantidade = numeros.count(busca_numero)
+    print(f"O número {busca_numero} aparece {quantidade} vezes.")
+
+    for indice, valor in enumerate(numeros):
+        if valor == busca_numero:
+            posicoes.append(indice)
+
     print(f"O número {busca_numero} está nos índices {posicoes}.")
 else:
-    #print(posicoes)
     print(f"O número {busca_numero} não foi encontrado na lista.")
 
 print(f"Lista fornecida: {numeros}")
