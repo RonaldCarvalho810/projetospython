@@ -1,0 +1,14 @@
+{
+    "OPV7512": {
+        "modelo": "hb20",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-24T10:40:23.786713",
+        "status": "inativo"
+    },
+    "GOS4935": {
+        "modelo": "kadett",
+        "valor_hora": 10.0,
+        "entrada": "2024-11-24T10:44:24.571047",
+        "status": "ativo"
+    }
+}
