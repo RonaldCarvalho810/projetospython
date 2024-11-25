@@ -9,6 +9,36 @@
         "modelo": "kadett",
         "valor_hora": 10.0,
         "entrada": "2024-11-24T10:44:24.571047",
+        "status": "inativo"
+    },
+    "OPB1705": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-25T13:08:14.403561",
+        "status": "inativo"
+    },
+    "LPP9874": {
+        "modelo": "celta",
+        "valor_hora": 50.0,
+        "entrada": "2024-11-25T13:08:39.438460",
         "status": "ativo"
+    },
+    "PPP1155": {
+        "modelo": "celta",
+        "valor_hora": 20.0,
+        "entrada": "2024-11-25T13:17:35.509039",
+        "status": "ativo"
+    },
+    "UUU123": {
+        "modelo": "point",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-25T15:41:39.404576",
+        "status": "inativo"
+    },
+    "FFF111": {
+        "modelo": "gol",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-25T15:43:09.435082",
+        "status": "inativo"
     }
 }

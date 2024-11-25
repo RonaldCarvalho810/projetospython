@@ -69,7 +69,7 @@ def atualizar_grid(treeview):
 def abrir_formulario_entrada(treeview):
     form_entrada = tk.Toplevel()
     form_entrada.title("Entrada de Veículos")
-    form_entrada.geometry("400x300")
+    form_entrada.geometry("800x350")
     configurar_tema_escuro(form_entrada)
 
     ttk.Label(form_entrada, text="Placa do Veículo:").pack(pady=5)
@@ -122,7 +122,7 @@ def abrir_formulario_entrada(treeview):
 def abrir_formulario_saida(treeview):
     form_saida = tk.Toplevel()
     form_saida.title("Saída de Veículos")
-    form_saida.geometry("400x300")
+    form_saida.geometry("500x200")
     configurar_tema_escuro(form_saida)
 
     ttk.Label(form_saida, text="Placa do Veículo:").pack(pady=5)
@@ -158,7 +158,7 @@ def abrir_formulario_saida(treeview):
 def main():
     root = tk.Tk()
     root.title("Gerenciamento de Estacionamento")
-    root.geometry("600x400")
+    root.geometry("800x600")
     configurar_tema_escuro(root)
 
     ttk.Label(root, text="Veículos Ativos no Estacionamento", font=("Arial", 14)).pack(pady=10)
