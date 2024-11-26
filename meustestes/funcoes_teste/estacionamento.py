@@ -51,7 +51,7 @@ def calcular_custo(entrada, valor_hora):
     elif minutos <= 45:
         custo = valor_minuto * 45
     else:
-        custo = valor_hora  # Valor cheio após 45 minutos
+        custo = valor_minuto * minutos   #valor_hora    Valor cheio após 45 minutos
 
     return minutos, round(custo, 2)
 

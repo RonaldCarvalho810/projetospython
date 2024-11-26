@@ -21,13 +21,13 @@
         "modelo": "celta",
         "valor_hora": 50.0,
         "entrada": "2024-11-25T13:08:39.438460",
-        "status": "ativo"
+        "status": "inativo"
     },
     "PPP1155": {
         "modelo": "celta",
         "valor_hora": 20.0,
         "entrada": "2024-11-25T13:17:35.509039",
-        "status": "ativo"
+        "status": "inativo"
     },
     "UUU123": {
         "modelo": "point",
@@ -39,6 +39,12 @@
         "modelo": "gol",
         "valor_hora": 25.0,
         "entrada": "2024-11-25T15:43:09.435082",
+        "status": "inativo"
+    },
+    "PPP111": {
+        "modelo": "voyage",
+        "valor_hora": 20.0,
+        "entrada": "2024-11-26T09:02:51.637496",
         "status": "inativo"
     }
 }
