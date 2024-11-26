@@ -1,5 +1,1 @@
-Cliente: marcela, Serviço: corte de cabelo, Data: 08/12/24
-Cliente: renato, Serviço: barba, Data: 15/12/24
-Cliente: gabriel, Serviço: sombrancelha, Data: 15/12/24
-Cliente: GUILHERME, Serviço: PEDILACAO A LASER DO SACO, Data: 24/12/24
-Cliente: KAYKY, Serviço: CACHINHOS DOURADOS, Data: 25/12/24
+Cliente: ana lara, Serviço: corte de cabelo, Data: 24/12/24
