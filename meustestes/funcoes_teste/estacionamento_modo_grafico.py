@@ -51,7 +51,7 @@ def calcular_custo(entrada, valor_hora):
     elif minutos <= 45:
         custo = valor_minuto * 45
     else:
-        custo = valor_minuto * minutos   #valor_hora    Valor cheio após 45 minutos
+        custo = valor_hora  # Valor cheio após 45 minutos
 
     return minutos, round(custo, 2)
 
@@ -69,7 +69,7 @@ def atualizar_grid(treeview):
 def abrir_formulario_entrada(treeview):
     form_entrada = tk.Toplevel()
     form_entrada.title("Entrada de Veículos")
-    form_entrada.geometry("800x350")
+    form_entrada.geometry("400x300")
     configurar_tema_escuro(form_entrada)
 
     ttk.Label(form_entrada, text="Placa do Veículo:").pack(pady=5)
@@ -119,15 +119,19 @@ def abrir_formulario_entrada(treeview):
     ttk.Button(form_entrada, text="Fechar", command=form_entrada.destroy).pack(pady=10)
 
 # Saída de veículos
-def abrir_formulario_saida(treeview):
+def abrir_formulario_saida(treeview, placa=None):
     form_saida = tk.Toplevel()
     form_saida.title("Saída de Veículos")
-    form_saida.geometry("500x200")
+    form_saida.geometry("400x300")
     configurar_tema_escuro(form_saida)
 
     ttk.Label(form_saida, text="Placa do Veículo:").pack(pady=5)
     entrada_placa = ttk.Entry(form_saida, width=30)
     entrada_placa.pack(pady=5)
+
+    if placa:
+        entrada_placa.insert(0, placa)
+        entrada_placa.config(state="readonly")
 
     def registrar_saida():
         placa = entrada_placa.get().strip().upper()
@@ -158,7 +162,7 @@ def abrir_formulario_saida(treeview):
 def main():
     root = tk.Tk()
     root.title("Gerenciamento de Estacionamento")
-    root.geometry("800x600")
+    root.geometry("600x400")
     configurar_tema_escuro(root)
 
     ttk.Label(root, text="Veículos Ativos no Estacionamento", font=("Arial", 14)).pack(pady=10)
@@ -173,10 +177,22 @@ def main():
 
     atualizar_grid(treeview)
 
+    # Evento de duplo clique na grid
+    def on_double_click(event):
+        item = treeview.selection()
+        if item:
+            placa = treeview.item(item, "values")[0]
+            abrir_formulario_saida(treeview, placa)
+
+    treeview.bind("<Double-1>", on_double_click)
+
     # Botões para abrir formulários
-    ttk.Button(root, text="Entrada de Veículos", command=lambda: abrir_formulario_entrada(treeview)).pack(pady=5)
-    ttk.Button(root, text="Saída de Veículos", command=lambda: abrir_formulario_saida(treeview)).pack(pady=5)
-    ttk.Button(root, text="Sair", command=root.destroy).pack(pady=10)
+    frame_botoes = ttk.Frame(root)
+    frame_botoes.pack(pady=10)
+
+    ttk.Button(frame_botoes, text="Entrada de Veículos", command=lambda: abrir_formulario_entrada(treeview)).pack(side="left", padx=5)
+    ttk.Button(frame_botoes, text="Saída de Veículos", command=lambda: abrir_formulario_saida(treeview)).pack(side="left", padx=5)
+    ttk.Button(frame_botoes, text="Sair", command=root.destroy).pack(side="left", padx=5)
 
     root.mainloop()
 

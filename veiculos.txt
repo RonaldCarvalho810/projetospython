@@ -46,5 +46,53 @@
         "valor_hora": 20.0,
         "entrada": "2024-11-26T09:02:51.637496",
         "status": "inativo"
+    },
+    "TYP0102": {
+        "modelo": "pop50",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-26T13:15:40.441690",
+        "status": "inativo"
+    },
+    "FRF0809": {
+        "modelo": "cg150",
+        "valor_hora": 12.0,
+        "entrada": "2024-11-26T13:16:09.066260",
+        "status": "inativo"
+    },
+    "POP0708": {
+        "modelo": "lan190",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-26T13:16:35.564481",
+        "status": "inativo"
+    },
+    "KJK2525": {
+        "modelo": "celta",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-26T13:29:16.882384",
+        "status": "inativo"
+    },
+    "PPP5555": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-26T13:34:49.762085",
+        "status": "inativo"
+    },
+    "HHH": {
+        "modelo": "7777",
+        "valor_hora": 12.0,
+        "entrada": "2024-11-26T13:35:03.541415",
+        "status": "inativo"
+    },
+    "IUI7766": {
+        "modelo": "cdx",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-26T13:35:27.313027",
+        "status": "inativo"
+    },
+    "POP2255": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-26T15:02:44.130588",
+        "status": "inativo"
     }
 }
