@@ -99,12 +99,12 @@
         "modelo": "gol",
         "valor_hora": 15.0,
         "entrada": "2024-11-26T16:37:38.583767",
-        "status": "ativo"
+        "status": "inativo"
     },
     "OOO2222": {
         "modelo": "celta",
         "valor_hora": 15.0,
         "entrada": "2024-11-26T16:38:14.780117",
-        "status": "ativo"
+        "status": "inativo"
     }
 }
