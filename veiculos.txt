@@ -106,5 +106,35 @@
         "valor_hora": 15.0,
         "entrada": "2024-11-26T16:38:14.780117",
         "status": "inativo"
+    },
+    "PPP2255": {
+        "modelo": "gol",
+        "valor_hora": 20.0,
+        "entrada": "2024-11-27T13:09:20.947834",
+        "status": "inativo"
+    },
+    "GGG3333": {
+        "modelo": "gol",
+        "valor_hora": 25.0,
+        "entrada": "2024-11-27T13:18:29.324230",
+        "status": "inativo"
+    },
+    "PPP0000": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-11-27T15:55:40.308288",
+        "status": "inativo"
+    },
+    "LKJ987987": {
+        "modelo": "hyun",
+        "valor_hora": 20.0,
+        "entrada": "2024-11-27T15:55:58.055635",
+        "status": "inativo"
+    },
+    "POP4400": {
+        "modelo": "cg150",
+        "valor_hora": 12.0,
+        "entrada": "2024-11-27T15:56:22.227307",
+        "status": "inativo"
     }
 }
