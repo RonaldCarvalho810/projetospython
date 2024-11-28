@@ -33,4 +33,4 @@ if (busca in lista_original):
     indice = lista_original.index(busca)
 print(indice)
 
-print("final do exercicio")
+print("final do exercicio da prova")
