@@ -17,7 +17,8 @@ for interno1 in range(rodadas):
     dezenas_selecionadas = []
     
     for _ in range(quantidade_dezenas):
-        random.shuffle(lista)
+        for a in range(0,rodadas):
+            random.shuffle(lista)
         escolhido = lista.pop(0)
         dezenas_selecionadas.append(escolhido)
     

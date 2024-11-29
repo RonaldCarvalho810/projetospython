@@ -21,7 +21,8 @@ def gerar_numeros():
             dezenas_selecionadas = []
 
             for _ in range(quantidade_dezenas):
-                random.shuffle(lista)
+                for interno_rodadas in range(0,rodadas):
+                    random.shuffle(lista)
                 escolhido = lista.pop(0)
                 dezenas_selecionadas.append(escolhido)
 
