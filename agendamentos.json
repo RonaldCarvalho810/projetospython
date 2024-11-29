@@ -9,12 +9,6 @@
         "cliente": "Ana Silva",
         "servico": "Corte de Cabelo",
         "funcionario": "Jo\u00e3o Pedro",
-        "data": "24/12/24"
-    },
-    {
-        "cliente": "Ana Silva",
-        "servico": "Corte de Cabelo",
-        "funcionario": "Jo\u00e3o Pedro",
         "data": "01/02/25"
     },
     {
@@ -28,18 +22,6 @@
         "servico": "Corte de Cabelo",
         "funcionario": "renatinho",
         "data": "08/02/25"
-    },
-    {
-        "cliente": "renata davila",
-        "servico": "babylise",
-        "funcionario": "renatinho",
-        "data": "24/12/24"
-    },
-    {
-        "cliente": "renata davila",
-        "servico": "babylise",
-        "funcionario": "renatinho",
-        "data": "24/12/24"
     },
     {
         "cliente": "kayky",

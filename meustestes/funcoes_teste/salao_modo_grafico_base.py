@@ -12,7 +12,7 @@ ARQUIVO_AGENDAMENTOS = "agendamentos.json"
 # Funções para manipulação de dados
 def carregar_dados(arquivo):
     if os.path.exists(arquivo):
-        with open(arquivo, "r", encoding="utf-8") as f:
+        with open(arquivo, "r") as f:
             try:
                 dados = json.load(f)
                 return dados if isinstance(dados, list) else []
@@ -21,8 +21,8 @@ def carregar_dados(arquivo):
     return []
 
 def salvar_dados(arquivo, dados):
-    with open(arquivo, "w", encoding="utf-8") as f:
-        json.dump(dados, f, indent=4, ensure_ascii=False)
+    with open(arquivo, "w") as f:
+        json.dump(dados, f, indent=4)
 
 # Inicializar dados
 clientes = carregar_dados(ARQUIVO_CLIENTES)
@@ -45,35 +45,34 @@ def configurar_tema(root):
 def abrir_cadastro(titulo, arquivo, campos):
     janela = tk.Toplevel()
     janela.title(f"Cadastro de {titulo}")
-    janela.geometry("800x400")
+    janela.geometry("600x400")
     configurar_tema(janela)
 
     dados = carregar_dados(arquivo)
 
     entradas = {}
     for i, campo in enumerate(campos):
-        ttk.Label(janela, text=f"{campo.capitalize()}:").grid(row=i, column=0, padx=10, pady=5, sticky="e")
+        ttk.Label(janela, text=f"{campo}:").grid(row=i, column=0, padx=10, pady=5, sticky="e")
         entrada = ttk.Entry(janela, width=30)
         entrada.grid(row=i, column=1, padx=10, pady=5)
         entradas[campo] = entrada
 
-    colunas = campos
+    colunas = list(campos)
     grade = ttk.Treeview(janela, columns=colunas, show="headings", height=10)
     grade.grid(row=len(campos), column=0, columnspan=2, padx=10, pady=10)
 
     for col in colunas:
         grade.heading(col, text=col.capitalize())
-        grade.column(col, width=200, anchor="center")
+        grade.column(col, width=150, anchor="center")
 
     def atualizar_grade():
-        # Atualiza a grade com os dados carregados
-        grade.delete(*grade.get_children())  # Remove todos os itens antes de atualizar
+        for item in grade.get_children():
+            grade.delete(item)
         for dado in dados:
             valores = [dado.get(campo, "") for campo in campos]
             grade.insert("", tk.END, values=valores)
 
     def salvar_item():
-        # Salva novo item
         novo_item = {campo: entradas[campo].get().strip() for campo in campos}
 
         if not all(novo_item.values()):
@@ -87,24 +86,9 @@ def abrir_cadastro(titulo, arquivo, campos):
             entrada.delete(0, tk.END)
         messagebox.showinfo("Sucesso", f"{titulo} cadastrado com sucesso!")
 
-    def excluir_item():
-        # Exclui item selecionado
-        selecionado = grade.selection()
-        if not selecionado:
-            messagebox.showerror("Erro", "Selecione um item para excluir.")
-            return
-
-        item = grade.item(selecionado)
-        valores = item["values"]
-        dados[:] = [dado for dado in dados if not all(dado.get(campo, "") == str(val) for campo, val in zip(campos, valores))]
-        salvar_dados(arquivo, dados)
-        atualizar_grade()
-        messagebox.showinfo("Sucesso", f"{titulo} excluído com sucesso!")
-
     atualizar_grade()
 
-    ttk.Button(janela, text=f"Salvar {titulo}", command=salvar_item).grid(row=len(campos) + 1, column=0, pady=10, padx=10, sticky="w")
-    ttk.Button(janela, text=f"Excluir {titulo}", command=excluir_item).grid(row=len(campos) + 1, column=1, pady=10, padx=10, sticky="e")
+    ttk.Button(janela, text=f"Salvar {titulo}", command=salvar_item).grid(row=len(campos) + 1, column=0, columnspan=2, pady=10)
 
 # Tela de Agendamentos
 def abrir_agendamentos():
@@ -176,21 +160,24 @@ def abrir_agendamentos():
         entrada_data.delete(0, tk.END)
 
     atualizar_grade()
-    ttk.Button(janela, text="Salvar Agendamento", command=salvar_agendamento).grid(row=4, column=0, pady=10, padx=10, sticky="w")
+
+    ttk.Button(janela, text="Salvar Agendamento", command=salvar_agendamento).grid(row=4, column=0, columnspan=3, pady=10)
 
 # Tela Principal
 def tela_principal():
     root = tk.Tk()
-    root.title("Sistema de Agendamentos de Salão")
+    root.title("Sistema para Salão de Beleza")
     root.geometry("600x400")
     configurar_tema(root)
 
-    ttk.Button(root, text="Cadastrar Clientes", command=lambda: abrir_cadastro("Cliente", ARQUIVO_CLIENTES, ["nome", "telefone", "email", "endereco"])).pack(pady=10)
-    ttk.Button(root, text="Cadastrar Funcionários", command=lambda: abrir_cadastro("Funcionário", ARQUIVO_FUNCIONARIOS, ["nome", "telefone", "email"])).pack(pady=10)
-    ttk.Button(root, text="Cadastrar Serviços", command=lambda: abrir_cadastro("Serviço", ARQUIVO_SERVICOS, ["nome", "descricao", "preco"])).pack(pady=10)
+    ttk.Button(root, text="Cadastro de Clientes", command=lambda: abrir_cadastro("Cliente", ARQUIVO_CLIENTES, ["nome", "telefone", "email", "endereço"])).pack(pady=10)
+    ttk.Button(root, text="Cadastro de Funcionários", command=lambda: abrir_cadastro("Funcionário", ARQUIVO_FUNCIONARIOS, ["nome", "telefone", "cargo"])).pack(pady=10)
+    ttk.Button(root, text="Cadastro de Serviços", command=lambda: abrir_cadastro("Serviço", ARQUIVO_SERVICOS, ["nome", "descrição", "preço"])).pack(pady=10)
     ttk.Button(root, text="Agendamentos", command=abrir_agendamentos).pack(pady=10)
+    ttk.Button(root, text="Sair", command=root.destroy).pack(pady=10)
 
     root.mainloop()
+
 
 if __name__ == "__main__":
     tela_principal()
