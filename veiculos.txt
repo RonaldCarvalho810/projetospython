@@ -136,5 +136,11 @@
         "valor_hora": 12.0,
         "entrada": "2024-11-27T15:56:22.227307",
         "status": "inativo"
+    },
+    "OPP": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-12-03T15:57:50.292656",
+        "status": "inativo"
     }
 }
