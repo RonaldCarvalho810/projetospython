@@ -1,1 +1,1 @@
-{"001": {"produto": "camisa", "preco": 10.5, "estoque": 251}, "002": {"produto": "tenis", "preco": 100.7, "estoque": 436}, "003": {"produto": "calca", "preco": 70.0, "estoque": 201}}
+{"001": {"produto": "camisa", "preco": 10.5, "estoque": 251}, "002": {"produto": "tenis", "preco": 100.7, "estoque": 400}, "003": {"produto": "calca", "preco": 70.0, "estoque": 201}}
