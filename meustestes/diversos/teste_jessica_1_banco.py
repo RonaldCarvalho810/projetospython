@@ -12,7 +12,7 @@ produtos = {
     "003": {"produto": "calca", "preco": 70.00, "estoque": 100}
 }
 
-#print(produtos)
+print(produtos)
 
 nome_procurado = input("Digite o código do produto: ")
 
