@@ -92,7 +92,7 @@
     "POP2255": {
         "modelo": "gol",
         "valor_hora": 15.0,
-        "entrada": "2024-11-26T15:02:44.130588",
+        "entrada": "2024-12-09T13:23:14.452866",
         "status": "inativo"
     },
     "POP1122": {
