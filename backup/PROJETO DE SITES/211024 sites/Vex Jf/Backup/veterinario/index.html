@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Danielle Milione - Médica Veterinária</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #3b6f8f;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .hero {
+            background-image: url('veterinaria.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h2 {
+            color: white;
+            font-size: 48px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .content h2 {
+            color: #3b6f8f;
+            font-size: 32px;
+        }
+
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .services {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .services .service {
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .services .service h3 {
+            color: #3b6f8f;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .services .service p {
+            font-size: 16px;
+        }
+
+        footer {
+            background-color: #3b6f8f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .services {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Danielle Milione</h1>
+    <p>Médica Veterinária - Cuidado e carinho para seu pet</p>
+    <nav>
+        <ul>
+            <li><a href="#about">Sobre</a></li>
+            <li><a href="#services">Serviços</a></li>
+            <li><a href="#contact">Contato</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Cuidando de quem você ama</h2>
+</section>
+
+<section id="about" class="content">
+    <h2>Sobre Drª Danielle Milione</h2>
+    <p>Com anos de experiência em cuidados veterinários, Drª Danielle Milione dedica-se a garantir a saúde e o bem-estar de seus animais de estimação. Oferecemos atendimento personalizado, com foco em carinho, atenção e cuidados profissionais.</p>
+</section>
+
+<section id="services" class="services">
+    <div class="service">
+        <h3>Consulta Geral</h3>
+        <p>Avaliação completa do estado de saúde do seu pet, com orientações detalhadas sobre cuidados preventivos.</p>
+    </div>
+    <div class="service">
+        <h3>Vacinação</h3>
+        <p>Proteja seu pet de doenças com um plano de vacinação atualizado e personalizado.</p>
+    </div>
+    <div class="service">
+        <h3>Emergências</h3>
+        <p>Atendimento emergencial para situações que requerem cuidado imediato e especializado.</p>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2024 Danielle Milione - Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

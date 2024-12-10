@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Viagens</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link para um arquivo CSS externo -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        section {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, select, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background: #35424a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3a434e;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #35424a;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        /* Estilos para o popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .popup-content h2 {
+            margin-top: 0;
+        }
+        .popup-content button {
+            margin-top: 20px;
+            background-color: #35424a;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup-content button:hover {
+            background-color: #3a434e;
+        }
+    </style>
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>VEX JF - SOLUÇÕES INTELIGENTES</h1>
+    <nav>
+        <a href="#servicos">Serviços</a>
+        <a href="#agendar">Agendar</a>
+        <a href="#" onclick="showPopup()">Contato</a> <!-- Ao clicar, abre o popup -->
+    </nav>
+</header>
+
+<section id="servicos">
+    <h2>Serviços Oferecidos</h2>
+    <ul>
+        <li><a href="viagens_executivas.html">Viagens Executivas</a></li>
+        <li><a href="informatica.html">Informática</a></li>
+        <li><a href="cosmeticos.html">Cosméticos</a></li>
+    </ul>
+</section>
+
+<!-- Popup de contato -->
+<div id="popup" class="popup-overlay">
+    <div class="popup-content">
+        <h2>Contato</h2>
+        <p><strong>Nome:</strong> Ronald Carvalho</p>
+        <p><strong>Celular - Whatsapp:</strong> 32984137812</p>
+        <p><strong>Email:</strong> contato@vexjf.com.br</p>
+        <button onclick="closePopup()">Fechar</button>
+    </div>
+</div>
+
+<footer id="contato">
+    <p>&copy; 2019 VEX JF - SOLUÇÕES INTELIGENTES. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

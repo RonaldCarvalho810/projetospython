@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Daniele Ferreira Milione - Médica Veterinária</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #3b6f8f;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        nav {
+            margin-top: 15px;
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+        }
+
+        .hero {
+            background-image: url('veterinaria.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h2 {
+            color: white;
+            font-size: 48px;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+
+        .content {
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        .content h2 {
+            color: #3b6f8f;
+            font-size: 32px;
+        }
+
+        .content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-top: 10px;
+        }
+
+        .services {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+
+        .services .service {
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            flex: 1;
+            max-width: 300px;
+        }
+
+        .services .service h3 {
+            color: #3b6f8f;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .services .service p {
+            font-size: 16px;
+        }
+
+        .gallery {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .gallery h2 {
+            color: #3b6f8f;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .gallery-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-images img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-images img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Estilos para o modal (visualização de imagem em tela cheia) */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #3b6f8f;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .services {
+                flex-direction: column;
+            }
+
+            .modal-content {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Daniele Ferreira Milione</h1>
+    <p>Médica Veterinária - Cuidado e carinho para seu pet</p>
+    <nav>
+        <ul>
+            <li><a href="#about">Sobre</a></li>
+            <li><a href="#services">Serviços</a></li>
+            <li><a href="#gallery">Galeria</a></li>
+            <li><a href="#contact">Contato</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <h2>Cuidando de quem você ama</h2>
+</section>
+
+<section id="about" class="content">
+    <h2>Sobre Drª Daniele Ferreira Milione</h2>
+    <p>Graduada pela UFRURALRJ, Com pós graduação em clínica e cirurgia de cães e gatos e com anos de experiência em cuidados veterinários, Drª Daniele Ferreira Milione dedica-se a garantir a saúde e o bem-estar de seus animais de estimação. Oferecemos atendimento personalizado, com foco em carinho, atenção e cuidados profissionais.</p>
+</section>
+
+<section id="services" class="services">
+    <div class="service">
+        <h3>Consulta Geral - Atendimento em clínica ou Residencial</h3>
+        <p>Avaliação completa do estado de saúde do seu pet, com orientações detalhadas sobre cuidados preventivos.</p>
+    </div>
+    <div class="service">
+        <h3>Vacinação</h3>
+        <p>Proteja seu pet de doenças com um plano de vacinação atualizado e personalizado.</p>
+    </div>
+    <div class="service">
+        <h3>Emergências - Atendimento Residencial</h3>
+        <p>Atendimento emergencial para situações que requerem cuidado imediato e especializado.</p>
+    </div>
+</section>
+
+<section id="gallery" class="gallery">
+    <h2>Galeria de Fotos</h2>
+    <div class="gallery-images">
+        <img src="imagens/imagem (1).jpg" alt="Imagem 1" onclick="openModal(this)">
+        <img src="imagens/imagem (2).jpg" alt="Imagem 2" onclick="openModal(this)">
+        <img src="imagens/imagem (3).jpg" alt="Imagem 3" onclick="openModal(this)">
+        <img src="imagens/imagem (4).jpg" alt="Imagem 4" onclick="openModal(this)">
+        <img src="imagens/imagem (5).jpg" alt="Imagem 5" onclick="openModal(this)">
+        <img src="imagens/imagem (6).jpg" alt="Imagem 6" onclick="openModal(this)">
+        <img src="imagens/imagem (7).jpg" alt="Imagem 7" onclick="openModal(this)">
+        <img src="imagens/imagem (8).jpg" alt="Imagem 8" onclick="openModal(this)">
+        <img src="imagens/imagem (9).jpg" alt="Imagem 9" onclick="openModal(this)">
+        <img src="imagens/imagem (10).jpg" alt="Imagem 10" onclick="openModal(this)">
+        <img src="imagens/imagem (11).jpg" alt="Imagem 11" onclick="openModal(this)">
+    </div>
+</section>
+
+<!-- Modal para visualização em tela cheia -->
+<div id="myModal" class="modal">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="modalImage">
+</div>
+
+<footer>
+    <p>&copy VEXJF; 2024 Daniele Ferreira Milione - Todos os direitos reservados.</p>
+</footer>
+
+<script>
+    // Função para abrir o modal e exibir a imagem clicada
+    function openModal(img) {
+        var modal = document.getElementById("myModal");
+        var modalImg = document.getElementById("modalImage");
+        modal.style.display = "block";
+        modalImg.src = img.src;
+    }
+
+    // Função para fechar o modal
+    function closeModal() {
+        var modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fotografia Profissional</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            position: relative;
+            min-height: 100vh;
+        }
+        /* Configurações de cabeçalho */
+        header {
+            background-color: #000000; /* Preto */
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        /* Marca d'água com a logo */
+        .watermark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('logo.jpg'); /* Logo no fundo */
+            background-size: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.5; /* Transparência da marca d'água */
+            z-index: -1; /* Coloca a imagem atrás do conteúdo */
+        }
+        /* Configurações de seção */
+        section {
+            padding: 40px;
+            max-width: 800px;
+            margin: auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1; /* Certifica que o conteúdo fica acima da marca d'água */
+        }
+        h2 {
+            color: #000000;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+        li a {
+            color: #000000;
+            text-decoration: none;
+        }
+        li a:hover {
+            text-decoration: underline;
+        }
+        /* Rodapé fixo */
+        footer {
+            background-color: #000000;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Marca d'água -->
+<div class="watermark"></div>
+
+<!-- Cabeçalho -->
+<header>
+    <h1>Fotografia Profissional</h1>
+    <nav>
+        <a href="#servicos">Serviços</a>
+        <a href="#portfolio">Portfólio</a>
+        <a href="#contato">Contato</a>
+    </nav>
+</header>
+
+<!-- Seção de Serviços -->
+<section id="servicos">
+    <h2>Serviços de Fotografia</h2>
+    <ul>
+        <li><a href="casamentos.html">Fotografia de Casamentos</a></li>
+        <li><a href="ensaios.html">Ensaios Fotográficos</a></li>
+        <li><a href="corporativo.html">Fotografia Corporativa</a></li>
+    </ul>
+</section>
+
+<!-- Rodapé fixo -->
+<footer id="contato">
+    <p>&copy; 2024 Fotografia Profissional. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

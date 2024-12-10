@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosméticos</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link para um arquivo CSS externo -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Garante que a página ocupe a altura total da janela */
+        }
+        header {
+            background: #000000; /* Cor preta */
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            margin: 0;
+            display: inline-block;
+        }
+        /* Estilo para a imagem de logo */
+        .logo {
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            height: 60px; /* Ajuste conforme o tamanho desejado */
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        section {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1; /* Faz o conteúdo ocupar o espaço disponível */
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            border-bottom: 1px solid #cccccc;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #000000; /* Cor preta */
+            color: white;
+            width: 100%;
+            position: sticky;
+            bottom: 0;
+        }
+        /* Estilos para o popup */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .popup-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .popup-content h2 {
+            margin-top: 0;
+        }
+        .popup-content button {
+            margin-top: 20px;
+            background-color: #35424a;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .popup-content button:hover {
+            background-color: #3a434e;
+        }
+    </style>
+    <script>
+        function showPopup() {
+            document.getElementById('popup').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <img src="logo.jpg" alt="Logo Cosméticos" class="logo"> <!-- Logo adicionada -->
+    <h1>VEX JF - COSMÉTICOS</h1>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#" onclick="showPopup()">Contato</a> <!-- Ao clicar, abre o popup -->
+    </nav>
+</header>
+
+<section id="produtos">
+    <h2>Produtos</h2>
+    <ul>
+        <li><strong>Cremes Hidratantes:</strong> Linha de cremes para todos os tipos de pele.</li>
+        <li><strong>Velas Aromáticas:</strong> Diversos aromas para criar um ambiente relaxante.</li>
+        <li><strong>Essências:</strong> Essências puras para uso em difusores ou massagens.</li>
+    </ul>
+</section>
+
+<!-- Popup de contato -->
+<div id="popup" class="popup-overlay">
+    <div class="popup-content">
+        <h2>Contato</h2>
+        <p><strong>Nome:</strong> Cosméticos Ltda</p>
+        <p><strong>Celular - Whatsapp:</strong> 32984137812</p>
+        <p><strong>Email:</strong> contato@cosmeticos.com.br</p>
+        <button onclick="closePopup()">Fechar</button>
+    </div>
+</div>
+
+<footer id="contato">
+    <p>&copy; 2019 VEX JF. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>

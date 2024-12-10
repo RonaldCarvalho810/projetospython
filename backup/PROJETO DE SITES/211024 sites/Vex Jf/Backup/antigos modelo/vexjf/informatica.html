@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços de Informática</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link para um arquivo CSS externo -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background: #35424a;
+            color: #ffffff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        nav {
+            margin: 10px 0;
+        }
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        section {
+            padding: 20px;
+            max-width: 800px;
+            margin: auto;
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 10px 0 5px;
+        }
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background: #35424a;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #3a434e;
+        }
+        footer {
+            text-align: center;
+            padding: 10px 0;
+            background: #35424a;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Serviços de Informática</h1>
+    <nav>
+        <a href="index.html">Início</a>
+        <a href="#agendar">Agendar Visita</a>
+        <a href="#contato">Contato</a>
+    </nav>
+</header>
+
+<section id="agendar">
+    <h2>Agende uma Visita Técnica</h2>
+    <form action="enviar_email.php" method="post">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="data">Data da Visita:</label>
+        <input type="date" id="data" name="data" required>
+
+        <label for="contato">E-mail:</label>
+        <input type="email" id="contato" name="contato" required>
+
+        <label for="mensagem">Descrição do Problema:</label>
+        <textarea id="mensagem" name="mensagem" rows="4" placeholder="Descreva o problema técnico..."></textarea>
+
+        <button type="submit">Enviar</button>
+    </form>
+</section>
+
+<footer id="contato">
+    <p>&copy; 2024 Serviços de Informática. Todos os direitos reservados.</p>
+</footer>
+
+</body>
+</html>
