@@ -142,5 +142,23 @@
         "valor_hora": 15.0,
         "entrada": "2024-12-03T15:57:50.292656",
         "status": "inativo"
+    },
+    "POP9988": {
+        "modelo": "gol",
+        "valor_hora": 15.0,
+        "entrada": "2024-12-11T13:45:28.331995",
+        "status": "inativo"
+    },
+    "TRT8877": {
+        "modelo": "celta",
+        "valor_hora": 25.0,
+        "entrada": "2024-12-11T13:44:44.342699",
+        "status": "inativo"
+    },
+    "OOPP2255": {
+        "modelo": "cwelta",
+        "valor_hora": 25.0,
+        "entrada": "2024-12-11T13:45:45.504594",
+        "status": "ativo"
     }
 }

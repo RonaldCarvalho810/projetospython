@@ -86,18 +86,15 @@
             var resultado = document.getElementById('resultado');
             var valorTotal;
 
-            // Validação de campos vazios
             if (isNaN(km) || isNaN(valorKm) || km <= 0 || valorKm <= 0) {
                 resultado.innerHTML = "Por favor, insira valores válidos para distância e valor por km.";
                 return;
             }
 
             if (tipoViagem == "1") {
-                // Viagem na cidade
                 valorTotal = valorKm * km;
                 resultado.innerHTML = "Valor total do deslocamento na cidade: R$ " + valorTotal.toFixed(2);
             } else if (tipoViagem == "2") {
-                // Viagem intermunicipal
                 valorTotal = (valorKm * (km * 2));
                 resultado.innerHTML = "Valor total da viagem intermunicipal: R$ " + valorTotal.toFixed(2);
             } else {

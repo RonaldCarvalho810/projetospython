@@ -3,10 +3,8 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 import json
 
-# Caminho do arquivo de dados
 ARQUIVO_DADOS = "veiculos.txt"
 
-# Função para carregar os dados do arquivo
 def carregar_dados():
     try:
         with open(ARQUIVO_DADOS, "r") as f:
@@ -14,7 +12,6 @@ def carregar_dados():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
-# Função para salvar os dados no arquivo
 def salvar_dados(dados):
     try:
         with open(ARQUIVO_DADOS, "w") as f:
@@ -22,10 +19,8 @@ def salvar_dados(dados):
     except Exception as e:
         messagebox.showerror("Erro", f"Não foi possível salvar os dados.\n{e}")
 
-# Banco de dados inicializado do arquivo
 veiculos = carregar_dados()
 
-# Configurar tema escuro
 def configurar_tema_escuro(root):
     style = ttk.Style(root)
     root.configure(bg="#1E1E1E")
@@ -36,10 +31,9 @@ def configurar_tema_escuro(root):
     style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333", font=("Arial", 10))
     style.configure("Treeview.Heading", background="#444444", foreground="#FFFFFF", font=("Arial", 10, "bold"))
 
-# Função para calcular o custo do tempo de permanência
 def calcular_custo(entrada, valor_hora):
     agora = datetime.now()
-    entrada = datetime.fromisoformat(entrada)  # Converte string para datetime
+    entrada = datetime.fromisoformat(entrada)  
     delta = agora - entrada
     minutos = delta.total_seconds() / 60
     valor_minuto = valor_hora / 60
@@ -51,11 +45,10 @@ def calcular_custo(entrada, valor_hora):
     elif minutos <= 45:
         custo = valor_minuto * 45
     else:
-        custo = valor_hora  # Valor cheio após 45 minutos
+        custo = valor_hora  
 
     return minutos, round(custo, 2)
 
-# Atualizar grid de veículos ativos
 def atualizar_grid(treeview):
     for item in treeview.get_children():
         treeview.delete(item)
@@ -65,7 +58,6 @@ def atualizar_grid(treeview):
             entrada = datetime.fromisoformat(dados["entrada"]).strftime("%d/%m/%Y %H:%M:%S")
             treeview.insert("", "end", values=(placa, dados["modelo"], entrada, f"R$ {dados['valor_hora']:.2f}"))
 
-# Entrada de veículos
 def abrir_formulario_entrada(treeview):
     form_entrada = tk.Toplevel()
     form_entrada.title("Entrada de Veículos")
@@ -118,7 +110,6 @@ def abrir_formulario_entrada(treeview):
     ttk.Button(form_entrada, text="Salvar", command=salvar_entrada).pack(pady=20)
     ttk.Button(form_entrada, text="Fechar", command=form_entrada.destroy).pack(pady=10)
 
-# Saída de veículos
 def abrir_formulario_saida(treeview, placa=None):
     form_saida = tk.Toplevel()
     form_saida.title("Saída de Veículos")
@@ -144,7 +135,7 @@ def abrir_formulario_saida(treeview, placa=None):
         valor_hora = veiculos[placa]["valor_hora"]
         minutos, custo = calcular_custo(entrada, valor_hora)
 
-        veiculos[placa]["status"] = "inativo"  # Atualizar status do veículo
+        veiculos[placa]["status"] = "inativo"  
         salvar_dados(veiculos)
 
         messagebox.showinfo(
@@ -158,7 +149,7 @@ def abrir_formulario_saida(treeview, placa=None):
     ttk.Button(form_saida, text="Registrar Saída", command=registrar_saida).pack(pady=20)
     ttk.Button(form_saida, text="Fechar", command=form_saida.destroy).pack(pady=10)
 
-# Tela principal
+
 def main():
     root = tk.Tk()
     root.title("Gerenciamento de Estacionamento")
@@ -167,7 +158,6 @@ def main():
 
     ttk.Label(root, text="Veículos Ativos no Estacionamento", font=("Arial", 14)).pack(pady=10)
 
-    # Treeview para exibir os veículos ativos
     colunas = ("Placa", "Modelo", "Entrada", "Valor Hora")
     treeview = ttk.Treeview(root, columns=colunas, show="headings", height=10)
     for coluna in colunas:
@@ -177,7 +167,6 @@ def main():
 
     atualizar_grid(treeview)
 
-    # Evento de duplo clique na grid
     def on_double_click(event):
         item = treeview.selection()
         if item:
@@ -186,7 +175,6 @@ def main():
 
     treeview.bind("<Double-1>", on_double_click)
 
-    # Botões para abrir formulários
     frame_botoes = ttk.Frame(root)
     frame_botoes.pack(pady=10)
 
