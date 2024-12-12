@@ -98,7 +98,7 @@
     "POP1122": {
         "modelo": "gol",
         "valor_hora": 15.0,
-        "entrada": "2024-11-26T16:37:38.583767",
+        "entrada": "2024-12-12T00:38:58.307270",
         "status": "inativo"
     },
     "OOO2222": {
@@ -159,6 +159,6 @@
         "modelo": "cwelta",
         "valor_hora": 25.0,
         "entrada": "2024-12-11T13:45:45.504594",
-        "status": "ativo"
+        "status": "inativo"
     }
 }
