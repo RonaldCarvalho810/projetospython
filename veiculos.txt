@@ -7,8 +7,8 @@
     },
     "GOS4935": {
         "modelo": "kadett",
-        "valor_hora": 10.0,
-        "entrada": "2024-11-24T10:44:24.571047",
+        "valor_hora": 15.0,
+        "entrada": "2025-02-11T15:22:34.581837",
         "status": "inativo"
     },
     "OPB1705": {
