@@ -93,7 +93,7 @@ def configurar_tema(root):
 def abrir_cadastro(titulo, tabela, campos):
     janela = tk.Toplevel()
     janela.title(f"Cadastro de {titulo}")
-    janela.geometry("700x400")
+    janela.geometry("800x450")
     configurar_tema(janela)
 
     entradas = {}
