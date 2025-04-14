@@ -2,7 +2,7 @@
     "OPV7512": {
         "modelo": "hb20",
         "valor_hora": 15.0,
-        "entrada": "2024-11-24T10:40:23.786713",
+        "entrada": "2025-04-14T14:44:22.933895",
         "status": "inativo"
     },
     "GOS4935": {
@@ -159,6 +159,12 @@
         "modelo": "cwelta",
         "valor_hora": 25.0,
         "entrada": "2024-12-11T13:45:45.504594",
+        "status": "inativo"
+    },
+    "ABC1122": {
+        "modelo": "gol",
+        "valor_hora": 25.0,
+        "entrada": "2025-04-14T14:47:25.292437",
         "status": "inativo"
     }
 }

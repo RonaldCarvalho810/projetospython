@@ -1,7 +1,7 @@
 from kivymd.app import MDApp
 
 try:
-    from kivymd.uix.picker import MDTimePicker  # versão antiga
+    from kivymd.uix.pickers import MDTimePicker  # versão antiga
 except:
     from kivymd.uix.pickers import MDTimePicker  # versão nova
 
