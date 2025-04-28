@@ -147,6 +147,7 @@ class ViagemApp(App):
         html = """
         <html>
         <head>
+            <meta charset="UTF-8">
             <title>Relatório de Viagens</title>
             <style>
                 body { font-family: Arial; margin: 20px; }
@@ -157,6 +158,7 @@ class ViagemApp(App):
         </head>
         <body>
             <h2>Relatório de Viagens</h2>
+            <h3>Câmara de Dores do Turvo</h3>
             <table>
                 <tr>
                     <th>ID</th><th>Origem</th><th>Destino</th><th>Início</th><th>Fim</th><th>KM Inicial</th><th>KM Final</th>
