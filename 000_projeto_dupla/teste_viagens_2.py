@@ -1,5 +1,6 @@
 import sqlite3
 import webbrowser
+from datetime import datetime
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
@@ -12,8 +13,8 @@ from kivy.uix.modalview import ModalView
 from kivy.core.window import Window
 
 Window.size = (400, 650)
-
 DB_NAME = "viagens.db"
+FORMATO_DATA = "%d/%m/%Y %H:%M"
 
 def criar_tabela():
     conn = sqlite3.connect(DB_NAME)
@@ -26,7 +27,9 @@ def criar_tabela():
             data_hora_inicio TEXT NOT NULL,
             data_hora_fim TEXT,
             km_inicial INTEGER,
-            km_final INTEGER
+            km_final INTEGER,
+            km_deslocado INTEGER,
+            tempo_viagem TEXT
         )
     ''')
     conn.commit()
@@ -40,7 +43,7 @@ class ViagemApp(App):
         self.origem_input = TextInput(hint_text="Origem", multiline=False)
         self.destino_input = TextInput(hint_text="Destino", multiline=False)
         self.km_inicial_input = TextInput(hint_text="KM Inicial", multiline=False, input_filter='int')
-        self.data_hora_inicio_input = TextInput(hint_text="Data e Hora de Início (YYYY-MM-DD HH:MM)", multiline=False)
+        self.data_hora_inicio_input = TextInput(hint_text="Data e Hora de Início (DD/MM/AAAA HH:MM)", multiline=False)
 
         self.layout_principal.add_widget(self.origem_input)
         self.layout_principal.add_widget(self.destino_input)
@@ -74,10 +77,16 @@ class ViagemApp(App):
             self.mostrar_popup("Erro", "Preencha todos os campos.")
             return
 
+        try:
+            data_formatada = datetime.strptime(data_inicio, FORMATO_DATA).strftime(FORMATO_DATA)
+        except ValueError:
+            self.mostrar_popup("Erro", "Formato de data inválido. Use DD/MM/AAAA HH:MM.")
+            return
+
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
         cursor.execute('INSERT INTO viagens (origem, destino, data_hora_inicio, km_inicial) VALUES (?, ?, ?, ?)', 
-                       (origem, destino, data_inicio, int(km_inicial)))
+                       (origem, destino, data_formatada, int(km_inicial)))
         conn.commit()
         conn.close()
 
@@ -92,24 +101,24 @@ class ViagemApp(App):
         self.grid.clear_widgets()
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute('SELECT id, origem, destino, data_hora_inicio, data_hora_fim, km_inicial, km_final FROM viagens ORDER BY id DESC')
+        cursor.execute('SELECT id, origem, destino, data_hora_inicio, data_hora_fim, km_inicial, km_final, km_deslocado, tempo_viagem FROM viagens ORDER BY id DESC')
         viagens = cursor.fetchall()
         conn.close()
 
         for viagem in viagens:
             texto = f"ID: {viagem[0]}\nOrigem: {viagem[1]}\nDestino: {viagem[2]}\nInício: {viagem[3]}\nKM Inicial: {viagem[5]}"
             if viagem[4]:
-                texto += f"\nFim: {viagem[4]}\nKM Final: {viagem[6] if viagem[6] else '-'}"
+                texto += f"\nFim: {viagem[4]}\nKM Final: {viagem[6]}\nDeslocado: {viagem[7]} km\nDuração: {viagem[8]}"
             else:
                 texto += "\n[Fim não informado]"
 
-            btn = Button(text=texto, size_hint_y=None, height=160)
+            btn = Button(text=texto, size_hint_y=None, height=180)
             btn.bind(on_press=lambda inst, vid=viagem[0]: self.adicionar_fim_viagem(vid))
             self.grid.add_widget(btn)
 
     def adicionar_fim_viagem(self, id_viagem):
         content = BoxLayout(orientation='vertical', padding=10, spacing=10)
-        input_fim = TextInput(hint_text="Data e Hora de Fim (YYYY-MM-DD HH:MM)", multiline=False)
+        input_fim = TextInput(hint_text="Data e Hora de Fim (DD/MM/AAAA HH:MM)", multiline=False)
         input_km_final = TextInput(hint_text="KM Final", multiline=False, input_filter='int')
         btn_salvar = Button(text="Salvar")
 
@@ -124,13 +133,36 @@ class ViagemApp(App):
             fim = input_fim.text.strip()
             km_final = input_km_final.text.strip()
             if fim and km_final:
-                conn = sqlite3.connect(DB_NAME)
-                cursor = conn.cursor()
-                cursor.execute('UPDATE viagens SET data_hora_fim = ?, km_final = ? WHERE id = ?', (fim, int(km_final), id_viagem))
-                conn.commit()
-                conn.close()
-                popup.dismiss()
-                self.carregar_viagens()
+                try:
+                    conn = sqlite3.connect(DB_NAME)
+                    cursor = conn.cursor()
+                    cursor.execute('SELECT data_hora_inicio, km_inicial FROM viagens WHERE id = ?', (id_viagem,))
+                    resultado = cursor.fetchone()
+                    if resultado:
+                        data_inicio_str, km_inicial = resultado
+                        inicio_dt = datetime.strptime(data_inicio_str, FORMATO_DATA)
+                        fim_dt = datetime.strptime(fim, FORMATO_DATA)
+                        duracao = fim_dt - inicio_dt
+                        km_deslocado = int(km_final) - km_inicial
+                        tempo_viagem = str(duracao)
+                        fim_formatado = fim_dt.strftime(FORMATO_DATA)
+
+                        cursor.execute('''
+                            UPDATE viagens 
+                            SET data_hora_fim = ?, km_final = ?, km_deslocado = ?, tempo_viagem = ?
+                            WHERE id = ?
+                        ''', (fim_formatado, int(km_final), km_deslocado, tempo_viagem, id_viagem))
+
+                        conn.commit()
+                        conn.close()
+                        popup.dismiss()
+                        self.carregar_viagens()
+                    else:
+                        self.mostrar_popup("Erro", "Viagem não encontrada.")
+                except ValueError:
+                    self.mostrar_popup("Erro", "Formato de data inválido. Use DD/MM/AAAA HH:MM.")
+                except Exception as e:
+                    self.mostrar_popup("Erro", f"Ocorreu um erro: {e}")
             else:
                 self.mostrar_popup("Erro", "Preencha todos os campos.")
 
@@ -140,7 +172,7 @@ class ViagemApp(App):
     def gerar_relatorio(self, instance):
         conn = sqlite3.connect(DB_NAME)
         cursor = conn.cursor()
-        cursor.execute('SELECT id, origem, destino, data_hora_inicio, data_hora_fim, km_inicial, km_final FROM viagens')
+        cursor.execute('SELECT id, origem, destino, data_hora_inicio, data_hora_fim, km_inicial, km_final, km_deslocado, tempo_viagem FROM viagens')
         viagens = cursor.fetchall()
         conn.close()
 
@@ -161,7 +193,8 @@ class ViagemApp(App):
             <h3>Câmara de Dores do Turvo</h3>
             <table>
                 <tr>
-                    <th>ID</th><th>Origem</th><th>Destino</th><th>Início</th><th>Fim</th><th>KM Inicial</th><th>KM Final</th>
+                    <th>ID</th><th>Origem</th><th>Destino</th><th>Início</th><th>Fim</th>
+                    <th>KM Inicial</th><th>KM Final</th><th>KM Deslocado</th><th>Tempo</th>
                 </tr>
         """
 
@@ -175,6 +208,8 @@ class ViagemApp(App):
                     <td>{v[4] if v[4] else '-'}</td>
                     <td>{v[5] if v[5] else '-'}</td>
                     <td>{v[6] if v[6] else '-'}</td>
+                    <td>{v[7] if v[7] else '-'}</td>
+                    <td>{v[8] if v[8] else '-'}</td>
                 </tr>
             """
 
