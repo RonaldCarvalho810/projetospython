@@ -128,7 +128,7 @@ class ManutencaoApp(App):
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Relatório de Manutenções</title>
+            <title>Relatório de Abastecimentos e Manutenções</title>
             <style>
                 body { font-family: Arial; margin: 20px; }
                 table { border-collapse: collapse; width: 100%; }
@@ -137,7 +137,7 @@ class ManutencaoApp(App):
             </style>
         </head>
         <body>
-            <h2>Relatório de Manutenções</h2>
+            <h2>Relatório de Abastecimentos e Manutenções</h2>
             <table>
                 <tr>
                     <th>ID</th><th>Placa</th><th>Data</th><th>KM</th><th>Oficina</th>
