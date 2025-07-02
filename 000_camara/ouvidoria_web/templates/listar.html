@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<h3>Manifestações</h3>
+<table class="table table-striped">
+<thead>
+<tr><th>ID</th><th>Nome</th><th>Tipo</th><th>Data</th><th>Status</th><th>Ações</th></tr>
+</thead><tbody>
+{% for r in regs %}
+<tr>
+  <td>{{r[0]}}</td><td>{{r[1]}}</td><td>{{r[2]}}</td><td>{{r[4]}}</td><td>{{r[7]}}</td>
+  <td><a href="/editar/{{r[0]}}" class="btn btn-sm btn-primary">Responder</a></td>
+</tr>
+{% endfor %}
+</tbody></table>
+{% endblock %}

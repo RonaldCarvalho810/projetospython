@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block body %}
+<h3>Editar Manifestação</h3>
+<form method="POST">
+  <div class="mb-3"><label>Status</label>
+    <select name="status" class="form-select">
+      <option {% if m[7]=='Pendente' %}selected{% endif %}>Pendente</option>
+      <option {% if m[7]=='Em andamento' %}selected{% endif %}>Em andamento</option>
+      <option {% if m[7]=='Finalizado' %}selected{% endif %}>Finalizado</option>
+    </select></div>
+  <div class="mb-3"><label>Resposta</label><textarea name="resposta" class="form-control">{{m[8]}}</textarea></div>
+  <div class="mb-3"><label>Servidor</label><input name="servidor" value="{{m[9]}}" class="form-control"></div>
+  <button type="submit" class="btn btn-success">Salvar</button>
+</form>
+{% endblock %}
