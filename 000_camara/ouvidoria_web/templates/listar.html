@@ -3,13 +3,45 @@
 <h3>Manifestações</h3>
 <table class="table table-striped">
 <thead>
-<tr><th>ID</th><th>Nome</th><th>Tipo</th><th>Data</th><th>Status</th><th>Ações</th></tr>
-</thead><tbody>
+<tr>
+  <th>ID</th>
+  <th>Nome</th>
+  <th>Tipo</th>
+  <th>Data</th>
+  <th>Prazo</th>
+  <th>Meio</th>
+  <th>Status</th>
+  <th>Resposta em</th>
+  <th>Ações</th>
+</tr>
+</thead>
+<tbody>
 {% for r in regs %}
 <tr>
-  <td>{{r[0]}}</td><td>{{r[1]}}</td><td>{{r[2]}}</td><td>{{r[4]}}</td><td>{{r[7]}}</td>
-  <td><a href="/editar/{{r[0]}}" class="btn btn-sm btn-primary">Responder</a></td>
+  <td>{{ r[0] }}</td>  <!-- ID -->
+  <td>{{ r[1] }}</td>  <!-- Nome -->
+  <td>{{ r[2] }}</td>  <!-- Tipo -->
+  <td>{{ r[4] }}</td>  <!-- Data da manifestação -->
+  <td>{{ r[6] }}</td>  <!-- Prazo final -->
+  <td>{{ r[5] }}</td>  <!-- Meio -->
+  <td>
+    <span class="badge 
+      {% if r[7] == 'Finalizado' %} bg-success 
+      {% elif r[7] == 'Em andamento' %} bg-warning text-dark 
+      {% else %} bg-danger 
+      {% endif %}
+    ">
+      {{ r[7] }}
+    </span>
+  </td>
+  <td>{{ r[10] or '---' }}</td>  <!-- Data da resposta -->
+  <td>
+    <a href="/editar/{{ r[0] }}" class="btn btn-sm btn-primary">
+      {% if r[8] %}Editar{% else %}Responder{% endif %}
+    </a>
+  </td>
 </tr>
 {% endfor %}
-</tbody></table>
+</tbody>
+</table>
 {% endblock %}
