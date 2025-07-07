@@ -2,8 +2,9 @@
 {% block body %}
 <h3>Responder Manifestação</h3>
 
-<form method="post">
+<a href="{{ url_for('listar') }}" class="btn btn-secondary mb-3">← Voltar à lista</a>
 
+<form method="post">
   <div class="mb-3">
     <label><strong>Data da manifestação:</strong></label>
     <input type="text" class="form-control" value="{{ m[4] }}" readonly>
@@ -43,6 +44,5 @@
   {% else %}
   <div class="alert alert-success">Manifestação finalizada. Alterações desabilitadas.</div>
   {% endif %}
-
 </form>
 {% endblock %}
