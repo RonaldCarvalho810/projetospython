@@ -1,15 +1,48 @@
 {% extends 'base.html' %}
 {% block body %}
-<h3>Editar Manifestação</h3>
-<form method="POST">
-  <div class="mb-3"><label>Status</label>
-    <select name="status" class="form-select">
-      <option {% if m[7]=='Pendente' %}selected{% endif %}>Pendente</option>
-      <option {% if m[7]=='Em andamento' %}selected{% endif %}>Em andamento</option>
-      <option {% if m[7]=='Finalizado' %}selected{% endif %}>Finalizado</option>
-    </select></div>
-  <div class="mb-3"><label>Resposta</label><textarea name="resposta" class="form-control">{{m[8]}}</textarea></div>
-  <div class="mb-3"><label>Servidor</label><input name="servidor" value="{{m[9]}}" class="form-control"></div>
-  <button type="submit" class="btn btn-success">Salvar</button>
+<h3>Responder Manifestação</h3>
+
+<form method="post">
+
+  <div class="mb-3">
+    <label><strong>Data da manifestação:</strong></label>
+    <input type="text" class="form-control" value="{{ m[4] }}" readonly>
+  </div>
+
+  <div class="mb-3">
+    <label><strong>Prazo final para resposta:</strong></label>
+    <input type="text" class="form-control" value="{{ m[6] }}" readonly>
+  </div>
+
+  <div class="mb-3">
+    <label><strong>Descrição da manifestação:</strong></label>
+    <textarea class="form-control" rows="4" readonly>{{ m[3] }}</textarea>
+  </div>
+
+  <div class="mb-3">
+    <label><strong>Status</strong></label>
+    <select name="status" class="form-control" {% if m[7] == 'Finalizado' %}disabled{% endif %}>
+      <option value="Pendente" {% if m[7] == 'Pendente' %}selected{% endif %}>Pendente</option>
+      <option value="Em andamento" {% if m[7] == 'Em andamento' %}selected{% endif %}>Em andamento</option>
+      <option value="Finalizado" {% if m[7] == 'Finalizado' %}selected{% endif %}>Finalizado</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label><strong>Resposta</strong></label>
+    <textarea name="resposta" class="form-control" rows="4" {% if m[7] == 'Finalizado' %}readonly{% endif %}>{{ m[8] or '' }}</textarea>
+  </div>
+
+  <div class="mb-3">
+    <label><strong>Servidor responsável</strong></label>
+    <input type="text" name="servidor" class="form-control" value="{{ m[9] or '' }}" {% if m[7] == 'Finalizado' %}readonly{% endif %}>
+  </div>
+
+  {% if m[7] != 'Finalizado' %}
+  <button type="submit" class="btn btn-success">Salvar Resposta</button>
+  {% else %}
+  <div class="alert alert-success">Manifestação finalizada. Alterações desabilitadas.</div>
+  {% endif %}
+
 </form>
 {% endblock %}
