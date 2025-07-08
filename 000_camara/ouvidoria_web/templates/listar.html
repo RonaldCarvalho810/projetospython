@@ -36,8 +36,18 @@
   </td>
   <td>{{ r[10] or '---' }}</td>  <!-- Data da resposta -->
   <td>
-    <a href="/editar/{{ r[0] }}" class="btn btn-sm btn-primary">
-      {% if r[8] %}Editar{% else %}Responder{% endif %}
+    <a href="/editar/{{ r[0] }}"
+       class="btn btn-sm
+       {% if r[7] == 'Finalizado' %} btn-success
+       {% elif r[7] == 'Em andamento' %} btn-warning text-dark
+       {% else %} btn-danger{% endif %}">
+      {% if r[7] == 'Finalizado' %}
+        Visualizar
+      {% elif r[7] == 'Em andamento' %}
+        Editar
+      {% else %}
+        Responder
+      {% endif %}
     </a>
   </td>
 </tr>
