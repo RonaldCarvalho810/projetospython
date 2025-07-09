@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 {% block body %}
 <h3>Manifestações</h3>
+
+<!-- Botão de Relatório HTML -->
+<a href="/relatorio" class="btn btn-outline-success mb-3" target="_blank">
+  📄 Visualizar Relatório (HTML)
+</a>
+
 <table class="table table-striped">
 <thead>
 <tr>
@@ -36,11 +42,7 @@
   </td>
   <td>{{ r[10] or '---' }}</td>  <!-- Data da resposta -->
   <td>
-    <a href="/editar/{{ r[0] }}"
-       class="btn btn-sm
-       {% if r[7] == 'Finalizado' %} btn-success
-       {% elif r[7] == 'Em andamento' %} btn-warning text-dark
-       {% else %} btn-danger{% endif %}">
+    <a href="/editar/{{ r[0] }}" class="btn btn-sm btn-primary">
       {% if r[7] == 'Finalizado' %}
         Visualizar
       {% elif r[7] == 'Em andamento' %}

@@ -105,6 +105,15 @@ def gerar_pdf():
     pdf.output('relatorio_ouvidoria.pdf')
     return redirect(url_for('listar'))
 
+@app.route('/relatorio')
+def relatorio_html():
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute('SELECT * FROM manifestacoes ORDER BY id DESC')
+    regs = c.fetchall()
+    conn.close()
+    return render_template('relatorio.html', regs=regs)
+
 if __name__ == '__main__':
     init_db()
     app.run(host='0.0.0.0', port=5000, debug=True)

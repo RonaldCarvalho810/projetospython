@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block body %}
+<h3>Relatório de Manifestações</h3>
+
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nome</th>
+      <th>Tipo</th>
+      <th>Descrição</th>
+      <th>Data</th>
+      <th>Meio</th>
+      <th>Prazo</th>
+      <th>Status</th>
+      <th>Resposta</th>
+      <th>Servidor</th>
+      <th>Data da Resposta</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in regs %}
+    <tr>
+      <td>{{ r[0] }}</td>
+      <td>{{ r[1] }}</td>
+      <td>{{ r[2] }}</td>
+      <td>{{ r[3] }}</td>
+      <td>{{ r[4] }}</td>
+      <td>{{ r[5] }}</td>
+      <td>{{ r[6] }}</td>
+      <td>
+        <span class="badge 
+          {% if r[7] == 'Finalizado' %} bg-success 
+          {% elif r[7] == 'Em andamento' %} bg-warning text-dark 
+          {% else %} bg-danger 
+          {% endif %}
+        ">
+          {{ r[7] }}
+        </span>
+      </td>
+      <td>{{ r[8] or '---' }}</td>
+      <td>{{ r[9] or '---' }}</td>
+      <td>{{ r[10] or '---' }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
