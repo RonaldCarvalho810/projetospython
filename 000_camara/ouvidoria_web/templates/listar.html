@@ -1,59 +1,93 @@
 {% extends 'base.html' %}
 {% block body %}
-<h3>Manifestações</h3>
+<h3>Manifestações Registradas</h3>
 
-<!-- Botão de Relatório HTML -->
-<a href="/relatorio" class="btn btn-outline-success mb-3" target="_blank">
-  📄 Visualizar Relatório (HTML)
-</a>
+<a href="{{ url_for('relatorio_html') }}" class="btn btn-secondary mb-3">Ver Relatório (HTML)</a>
 
-<table class="table table-striped">
-<thead>
-<tr>
-  <th>ID</th>
-  <th>Nome</th>
-  <th>Tipo</th>
-  <th>Data</th>
-  <th>Prazo</th>
-  <th>Meio</th>
-  <th>Status</th>
-  <th>Atualizado em</th>
-  <th>Ações</th>
-</tr>
-</thead>
-<tbody>
-{% for r in regs %}
-<tr>
-  <td>{{ r[0] }}</td>  <!-- ID -->
-  <td>{{ r[1] }}</td>  <!-- Nome -->
-  <td>{{ r[2] }}</td>  <!-- Tipo -->
-  <td>{{ r[4] }}</td>  <!-- Data da manifestação -->
-  <td>{{ r[6] }}</td>  <!-- Prazo final -->
-  <td>{{ r[5] }}</td>  <!-- Meio -->
-  <td>
-    <span class="badge 
-      {% if r[7] == 'Finalizado' %} bg-success 
-      {% elif r[7] == 'Em andamento' %} bg-warning text-dark 
-      {% else %} bg-danger 
-      {% endif %}
-    ">
-      {{ r[7] }}
-    </span>
-  </td>
-  <td>{{ r[10] or '---' }}</td>  <!-- Data da resposta -->
-  <td>
-    <a href="/editar/{{ r[0] }}" class="btn btn-sm btn-primary">
-      {% if r[7] == 'Finalizado' %}
-        Visualizar
-      {% elif r[7] == 'Em andamento' %}
-        Editar
-      {% else %}
-        Responder
-      {% endif %}
-    </a>
-  </td>
-</tr>
-{% endfor %}
-</tbody>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th><th>Nome</th><th>Tipo</th><th>Descrição</th>
+      <th>Data</th><th>Meio</th><th>Prazo</th><th>Status</th>
+      <th>Resposta</th><th>Servidor</th><th>Data Resposta</th><th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for m in regs %}
+    <tr>
+      <td>{{ m[0] }}</td>
+      <td>{{ m[1] }}</td>
+      <td>{{ m[2] }}</td>
+      <td>{{ m[3] }}</td>
+      <td>{{ m[4] }}</td>
+      <td>{{ m[5] }}</td>
+
+      <!-- Badge colorido para Prazo -->
+      <td>
+        <span class="badge prazo" data-prazo="{{ m[6] }}">{{ m[6] }}</span>
+      </td>
+
+      <!-- Badge colorido para Status -->
+      <td>
+        {% if m[7]|lower == 'pendente' %}
+          <span class="badge bg-danger">Pendente</span>
+        {% elif m[7]|lower == 'em andamento' %}
+          <span class="badge bg-warning text-dark">Em andamento</span>
+        {% elif m[7]|lower == 'finalizado' %}
+          <span class="badge bg-success">Finalizado</span>
+        {% else %}
+          <span class="badge bg-secondary">{{ m[7] }}</span>
+        {% endif %}
+      </td>
+
+      <td>{{ m[8] or '---' }}</td>
+      <td>{{ m[9] or '---' }}</td>
+      <td>{{ m[10] or '---' }}</td>
+
+      <!-- Botões de Ação com texto conforme o status, mas todos azuis -->
+      <td>
+        {% if m[7]|lower == 'pendente' %}
+          <a href="{{ url_for('editar', id=m[0]) }}" class="btn btn-sm btn-primary">Responder</a>
+        {% elif m[7]|lower == 'em andamento' %}
+          <a href="{{ url_for('editar', id=m[0]) }}" class="btn btn-sm btn-primary">Editar</a>
+        {% elif m[7]|lower == 'finalizado' %}
+          <a href="{{ url_for('editar', id=m[0]) }}" class="btn btn-sm btn-primary">Visualizar</a>
+        {% else %}
+          <a href="{{ url_for('editar', id=m[0]) }}" class="btn btn-sm btn-primary">Ação</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
 </table>
+
+<!-- Script para colorir os prazos dinamicamente -->
+<script>
+function aplicarCoresNosPrazos() {
+  const hoje = new Date();
+  const prazos = document.querySelectorAll('.prazo');
+
+  prazos.forEach(el => {
+    const textoData = el.dataset.prazo;
+    const partes = textoData.split('/');
+    if (partes.length === 3) {
+      const dataPrazo = new Date(partes[2], partes[1] - 1, partes[0]);
+      const diffTime = dataPrazo.getTime() - hoje.getTime();
+      const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+      el.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'text-white', 'text-dark');
+
+      if (diffDias > 7) {
+        el.classList.add('bg-success', 'text-white');
+      } else if (diffDias >= 2) {
+        el.classList.add('bg-warning', 'text-dark');
+      } else {
+        el.classList.add('bg-danger', 'text-white');
+      }
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', aplicarCoresNosPrazos);
+</script>
 {% endblock %}

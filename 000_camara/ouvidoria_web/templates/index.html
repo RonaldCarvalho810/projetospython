@@ -2,26 +2,65 @@
 {% block body %}
 <h3>Cadastrar Manifestação</h3>
 <form method="POST" action="/salvar">
-  <div class="mb-3"><label>Nome</label><input name="nome" class="form-control" required></div>
-  <div class="mb-3"><label>Tipo</label>
+  <div class="mb-3">
+    <label>Nome</label>
+    <input name="nome" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Tipo</label>
     <select name="tipo" class="form-select">
-      <option>Denúncia</option><option>Reclamação</option>
-      <option>Sugestão</option><option>Elogio</option><option>Solicitação</option>
-    </select></div>
-  <div class="mb-3"><label>Descrição</label><textarea name="descricao" class="form-control" required></textarea></div>
-  <div class="mb-3"><label>Meio</label>
+      <option>Denúncia</option>
+      <option>Reclamação</option>
+      <option>Sugestão</option>
+      <option>Elogio</option>
+      <option>Solicitação</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label>Descrição</label>
+    <textarea name="descricao" class="form-control" required></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label>Meio</label>
     <select name="meio" class="form-select">
-      <option>Presencial</option><option>Telefone</option>
-      <option>Site</option><option>WhatsApp</option><option>E-mail</option>
-    </select></div>
-  <div class="mb-3"><label>Dias para resposta</label><input name="dias" id="dias" class="form-control" required></div>
-  <div class="mb-3"><label>Prazo final</label><input type="text" id="prazo" class="form-control" readonly></div>
+      <option>Presencial</option>
+      <option>Telefone</option>
+      <option>Site</option>
+      <option>WhatsApp</option>
+      <option>E-mail</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label>Dias (úteis) para resposta</label>
+    <input name="dias" id="dias" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Prazo final</label>
+    <input type="text" id="prazo" name="prazo" class="form-control" readonly>
+  </div>
+
   <button type="submit" class="btn btn-success">Salvar</button>
 </form>
+
 <script>
 document.getElementById('dias').addEventListener('input', e => {
-  const d = parseInt(e.target.value) || 0;
-  const dt = new Date(); dt.setDate(dt.getDate()+d);
+  const diasUteis = parseInt(e.target.value) || 0;
+  let dt = new Date();
+  let adicionados = 0;
+
+  while (adicionados < diasUteis) {
+    dt.setDate(dt.getDate() + 1);
+    const diaSemana = dt.getDay(); // 0 = domingo, 6 = sábado
+    if (diaSemana !== 0 && diaSemana !== 6) {
+      adicionados++;
+    }
+  }
+
   document.getElementById('prazo').value = dt.toLocaleDateString('pt-BR');
 });
 </script>

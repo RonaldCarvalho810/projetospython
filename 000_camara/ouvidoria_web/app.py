@@ -27,6 +27,16 @@ def init_db():
     conn.commit()
     conn.close()
 
+# 👉 Função para calcular data somando apenas dias úteis
+def calcular_prazo_uteis(dias_uteis):
+    data = datetime.now()
+    adicionados = 0
+    while adicionados < dias_uteis:
+        data += timedelta(days=1)
+        if data.weekday() < 5:  # 0 a 4 = segunda a sexta
+            adicionados += 1
+    return data.strftime('%d/%m/%Y')
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -38,14 +48,16 @@ def salvar():
     descricao = request.form['descricao']
     meio = request.form['meio']
     dias = int(request.form['dias'] or 0)
-    prazo = (datetime.now() + timedelta(days=dias)).strftime('%d/%m/%Y')
+
+    prazo = calcular_prazo_uteis(dias)  # ✅ Calcula prazo em dias úteis
     datahora = datetime.now().strftime('%d/%m/%Y %H:%M')
+
     conn = sqlite3.connect(DB)
     c = conn.cursor()
     c.execute('''
         INSERT INTO manifestacoes
-        (nome,tipo,descricao,datahora,meio,prazo,status)
-        VALUES (?,?,?,?,?,?,?)''',
+        (nome, tipo, descricao, datahora, meio, prazo, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?)''',
         (nome, tipo, descricao, datahora, meio, prazo, 'Pendente'))
     conn.commit()
     conn.close()
@@ -60,7 +72,7 @@ def listar():
     conn.close()
     return render_template('listar.html', regs=regs)
 
-@app.route('/editar/<int:id>', methods=['GET','POST'])
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
     conn = sqlite3.connect(DB)
     c = conn.cursor()
@@ -70,13 +82,14 @@ def editar(id):
         servidor = request.form['servidor']
         dataresposta = datetime.now().strftime('%d/%m/%Y %H:%M')
         c.execute('''
-          UPDATE manifestacoes
-          SET status=?, resposta=?, servidor=?, dataresposta=?
-          WHERE id=?''',
-          (status, resposta, servidor, dataresposta, id))
+            UPDATE manifestacoes
+            SET status=?, resposta=?, servidor=?, dataresposta=?
+            WHERE id=?''',
+            (status, resposta, servidor, dataresposta, id))
         conn.commit()
         conn.close()
         return redirect(url_for('listar'))
+
     c.execute('SELECT * FROM manifestacoes WHERE id=?', (id,))
     m = c.fetchone()
     conn.close()
@@ -89,11 +102,13 @@ def gerar_pdf():
     c.execute('SELECT * FROM manifestacoes ORDER BY id DESC')
     regs = c.fetchall()
     conn.close()
+
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, "Relatório - Ouvidoria", ln=True, align='C')
     pdf.ln(10)
+
     for r in regs:
         pdf.multi_cell(0, 10,
             f"ID: {r[0]}\nNome: {r[1]}\nTipo: {r[2]}\nDescrição: {r[3]}\n"
@@ -102,6 +117,7 @@ def gerar_pdf():
             f"Data Resposta: {r[10] or '---'}\n"
         )
         pdf.ln(5)
+
     pdf.output('relatorio_ouvidoria.pdf')
     return redirect(url_for('listar'))
 
