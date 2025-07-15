@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Viagens Registradas</h3>
+<a href="{{ url_for('adicionar_viagem') }}">➕ Nova Viagem</a> | 
+<a href="{{ url_for('relatorio_viagens') }}">📄 Relatório</a>
+
+<table>
+    <tr>
+        <th>ID</th><th>Origem</th><th>Destino</th><th>Início</th><th>Fim</th>
+        <th>KM Inicial</th><th>KM Final</th><th>Deslocado</th><th>Tempo</th><th>Ações</th>
+    </tr>
+    {% for v in viagens %}
+    <tr>
+        <td>{{ v[0] }}</td>
+        <td>{{ v[1] }}</td>
+        <td>{{ v[2] }}</td>
+        <td>{{ v[3] }}</td>
+        <td>{{ v[4] or '-' }}</td>
+        <td>{{ v[5] }}</td>
+        <td>{{ v[6] or '-' }}</td>
+        <td>{{ v[7] or '-' }}</td>
+        <td>{{ v[8] or '-' }}</td>
+        <td>
+            {% if not v[4] %}
+            <a href="{{ url_for('encerrar_viagem', viagem_id=v[0]) }}">Encerrar</a>
+            {% else %}
+            -
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

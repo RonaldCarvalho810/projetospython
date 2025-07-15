@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Manutenções Registradas</h3>
+<a href="{{ url_for('adicionar_manutencao') }}">➕ Nova Manutenção</a>
+
+<table>
+    <tr>
+        <th>ID</th><th>Veículo</th><th>Descrição</th><th>Valor</th><th>Data</th>
+    </tr>
+    {% for m in manutencoes %}
+    <tr>
+        <td>{{ m[0] }}</td>
+        <td>{{ m[1] }}</td>
+        <td>{{ m[2] }}</td>
+        <td>R$ {{ "%.2f"|format(m[3]) }}</td>
+        <td>{{ m[4] }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
