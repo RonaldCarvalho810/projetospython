@@ -22,9 +22,12 @@
       <td>{{ m[4] }}</td>
       <td>{{ m[5] }}</td>
 
-      <!-- Badge colorido para Prazo -->
+      <!-- Coluna Prazo com badge e texto de dias restantes -->
       <td>
-        <span class="badge prazo" data-prazo="{{ m[6] }}">{{ m[6] }}</span>
+        <div class="prazo-container" data-prazo="{{ m[6] }}">
+          <span class="badge prazo">{{ m[6] }}</span>
+          <span class="dias-restantes text-muted small"></span>
+        </div>
       </td>
 
       <!-- Badge colorido para Status -->
@@ -40,11 +43,12 @@
         {% endif %}
       </td>
 
+      <!-- Outras colunas -->
       <td>{{ m[8] or '---' }}</td>
       <td>{{ m[9] or '---' }}</td>
       <td>{{ m[10] or '---' }}</td>
 
-      <!-- Botões de Ação com texto conforme o status, mas todos azuis -->
+      <!-- Botões de Ação -->
       <td>
         {% if m[7]|lower == 'pendente' %}
           <a href="{{ url_for('editar', id=m[0]) }}" class="btn btn-sm btn-primary">Responder</a>
@@ -61,28 +65,52 @@
   </tbody>
 </table>
 
-<!-- Script para colorir os prazos dinamicamente -->
+<!-- Estilo para ajustar o texto de dias restantes -->
+<style>
+.dias-restantes {
+  font-size: 12px;
+  display: block;
+  margin-top: 4px;
+}
+</style>
+
+<!-- Script para aplicar cores e calcular dias restantes -->
 <script>
 function aplicarCoresNosPrazos() {
   const hoje = new Date();
-  const prazos = document.querySelectorAll('.prazo');
+  const containers = document.querySelectorAll('.prazo-container');
 
-  prazos.forEach(el => {
-    const textoData = el.dataset.prazo;
+  containers.forEach(div => {
+    const textoData = div.dataset.prazo;
     const partes = textoData.split('/');
+    const badge = div.querySelector('.prazo');
+    const textoDias = div.querySelector('.dias-restantes');
+
     if (partes.length === 3) {
       const dataPrazo = new Date(partes[2], partes[1] - 1, partes[0]);
       const diffTime = dataPrazo.getTime() - hoje.getTime();
       const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-      el.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'text-white', 'text-dark');
+      badge.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'text-white', 'text-dark');
 
       if (diffDias > 7) {
-        el.classList.add('bg-success', 'text-white');
+        badge.classList.add('bg-success', 'text-white');
       } else if (diffDias >= 2) {
-        el.classList.add('bg-warning', 'text-dark');
+        badge.classList.add('bg-warning', 'text-dark');
       } else {
-        el.classList.add('bg-danger', 'text-white');
+        badge.classList.add('bg-danger', 'text-white');
+      }
+
+      if (textoDias) {
+        if (diffDias > 1) {
+          textoDias.textContent = `(${diffDias} dias restantes)`;
+        } else if (diffDias === 1) {
+          textoDias.textContent = `(1 dia restante)`;
+        } else if (diffDias === 0) {
+          textoDias.textContent = `(vence hoje)`;
+        } else {
+          textoDias.textContent = `(${Math.abs(diffDias)} dias vencido)`;
+        }
       }
     }
   });
