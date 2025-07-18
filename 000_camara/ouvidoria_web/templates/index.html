@@ -15,6 +15,8 @@
       <option>Sugestão</option>
       <option>Elogio</option>
       <option>Solicitação</option>
+      <option>Informação</option>
+      <option>Crítica</option>
     </select>
   </div>
 
@@ -35,8 +37,16 @@
   </div>
 
   <div class="mb-3">
-    <label>Dias (úteis) para resposta</label>
+    <label>Dias para resposta</label>
     <input name="dias" id="dias" class="form-control" required>
+  </div>
+
+  <div class="mb-3">
+    <label>Tipo de Prazo</label>
+    <select name="prazo_tipo" id="prazo_tipo" class="form-select">
+      <option value="corridos">Dias Corridos</option>
+      <option value="uteis">Dias Úteis</option>
+    </select>
   </div>
 
   <div class="mb-3">
@@ -48,20 +58,28 @@
 </form>
 
 <script>
-document.getElementById('dias').addEventListener('input', e => {
-  const diasUteis = parseInt(e.target.value) || 0;
+function calcularPrazo() {
+  const dias = parseInt(document.getElementById('dias').value) || 0;
+  const tipo = document.getElementById('prazo_tipo').value;
   let dt = new Date();
   let adicionados = 0;
 
-  while (adicionados < diasUteis) {
-    dt.setDate(dt.getDate() + 1);
-    const diaSemana = dt.getDay(); // 0 = domingo, 6 = sábado
-    if (diaSemana !== 0 && diaSemana !== 6) {
-      adicionados++;
+  if (tipo === 'corridos') {
+    dt.setDate(dt.getDate() + dias);
+  } else {
+    while (adicionados < dias) {
+      dt.setDate(dt.getDate() + 1);
+      const diaSemana = dt.getDay(); // 0 = domingo, 6 = sábado
+      if (diaSemana !== 0 && diaSemana !== 6) {
+        adicionados++;
+      }
     }
   }
 
   document.getElementById('prazo').value = dt.toLocaleDateString('pt-BR');
-});
+}
+
+document.getElementById('dias').addEventListener('input', calcularPrazo);
+document.getElementById('prazo_tipo').addEventListener('change', calcularPrazo);
 </script>
 {% endblock %}

@@ -27,14 +27,17 @@ def init_db():
     conn.commit()
     conn.close()
 
-# 👉 Função para calcular data somando apenas dias úteis
 def calcular_prazo_uteis(dias_uteis):
     data = datetime.now()
     adicionados = 0
     while adicionados < dias_uteis:
         data += timedelta(days=1)
-        if data.weekday() < 5:  # 0 a 4 = segunda a sexta
+        if data.weekday() < 5:  # Segunda a sexta
             adicionados += 1
+    return data.strftime('%d/%m/%Y')
+
+def calcular_prazo_corridos(dias):
+    data = datetime.now() + timedelta(days=dias)
     return data.strftime('%d/%m/%Y')
 
 @app.route('/')
@@ -48,8 +51,13 @@ def salvar():
     descricao = request.form['descricao']
     meio = request.form['meio']
     dias = int(request.form['dias'] or 0)
+    prazo_tipo = request.form.get('prazo_tipo', 'corridos')  # novo campo
+    
+    if prazo_tipo == 'uteis':
+        prazo = calcular_prazo_uteis(dias)
+    else:
+        prazo = calcular_prazo_corridos(dias)
 
-    prazo = calcular_prazo_uteis(dias)  # ✅ Calcula prazo em dias úteis
     datahora = datetime.now().strftime('%d/%m/%Y %H:%M')
 
     conn = sqlite3.connect(DB)
