@@ -32,7 +32,7 @@ def calcular_prazo_uteis(dias_uteis):
     adicionados = 0
     while adicionados < dias_uteis:
         data += timedelta(days=1)
-        if data.weekday() < 5:  # Segunda a sexta
+        if data.weekday() < 5:  
             adicionados += 1
     return data.strftime('%d/%m/%Y')
 
@@ -51,7 +51,7 @@ def salvar():
     descricao = request.form['descricao']
     meio = request.form['meio']
     dias = int(request.form['dias'] or 0)
-    prazo_tipo = request.form.get('prazo_tipo', 'corridos')  # novo campo
+    prazo_tipo = request.form.get('prazo_tipo', 'corridos')  
     
     if prazo_tipo == 'uteis':
         prazo = calcular_prazo_uteis(dias)
