@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block body %}
+<h2>Nova consulta / Simulação</h2>
+<form method="POST" action="{{ url_for('salvar') }}">
+  <label>Tipo do objeto/serviço</label>
+  <select name="tipo_objeto" required>
+    <option value="compra">Compra / outros serviços</option>
+    <option value="obra">Obra</option>
+    <option value="manutencao_veiculo">Manutenção de veículo</option>
+  </select>
+
+  <label>Descrição</label>
+  <textarea name="descricao" rows="3"></textarea>
+
+  <label>Valor estimado (ex.: 12.345,67)</label>
+  <input name="valor" type="text" placeholder="0,00" required>
+
+  <label>Urgência / prazo (opcional)</label>
+  <input name="urgencia" type="text">
+
+  <div class="checkboxes">
+    <label><input type="checkbox" name="fornecedor_exclusivo"> Fornecedor exclusivo (possível inexigibilidade)</label>
+    <label><input type="checkbox" name="servico_singular"> Serviço singular / notória especialização (possível inexigibilidade)</label>
+  </div>
+
+  <button type="submit">Calcular e salvar</button>
+</form>
+
+<p><a href="{{ url_for('historico') }}">Ver histórico de consultas</a></p>
+{% endblock %}

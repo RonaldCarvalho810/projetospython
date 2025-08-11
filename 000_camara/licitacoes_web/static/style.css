@@ -1,0 +1,11 @@
+body{font-family:Arial,Helvetica,sans-serif;margin:0;padding:0 0 60px 0}
+.container{max-width:900px;margin:20px auto;padding:0 15px}
+.site-header{background:#000;color:#fff;padding:12px 0}
+.site-header h1{margin:0;font-size:20px}
+.site-footer{background:#000;color:#fff;padding:10px 0;position:fixed;left:0;right:0;bottom:0}
+form label{display:block;margin-top:12px}
+input[type=text],textarea,select{width:100%;padding:8px;margin-top:4px;box-sizing:border-box}
+button{margin-top:12px;padding:10px 16px}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+table th, table td{border:1px solid #ddd;padding:6px;text-align:left}
+.checkboxes label{display:block;margin-top:8px}

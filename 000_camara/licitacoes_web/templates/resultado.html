@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block body %}
+<h2>Resultado da Análise</h2>
+<ul>
+  <li><strong>Tipo:</strong> {{ tipo_objeto }}</li>
+  <li><strong>Valor informado:</strong> R$ {{ ('{:.2f}'.format(valor)).replace('.',',') }}</li>
+  <li><strong>Resultado sugerido:</strong> {{ resultado }}</li>
+  <li><strong>Fundamento:</strong> {{ fundamento }}</li>
+</ul>
+
+<p><a href="{{ url_for('historico') }}">Ir para histórico</a> — o registro já foi salvo.</p>
+<p><a href="{{ url_for('index') }}">Nova consulta</a></p>
+{% endblock %}

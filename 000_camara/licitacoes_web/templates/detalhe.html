@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block body %}
+<h2>Detalhe da Consulta #{{ row['id'] }}</h2>
+<ul>
+  <li><strong>Data:</strong> {{ row['created_at'] }}</li>
+  <li><strong>Tipo:</strong> {{ row['tipo_objeto'] }}</li>
+  <li><strong>Descrição:</strong> {{ row['descricao'] }}</li>
+  <li><strong>Valor:</strong> R$ {{ ('{:.2f}'.format(row['valor_est'])).replace('.',',') }}</li>
+  <li><strong>Urgência:</strong> {{ row['urgencia'] }}</li>
+  <li><strong>Fornecedor exclusivo:</strong> {{ 'Sim' if row['fornecedor_exclusivo'] else 'Não' }}</li>
+  <li><strong>Serviço singular:</strong> {{ 'Sim' if row['servico_singular'] else 'Não' }}</li>
+  <li><strong>Resultado:</strong> {{ row['resultado'] }}</li>
+  <li><strong>Fundamento:</strong> {{ row['fundamento'] }}</li>
+</ul>
+<p><a href="{{ url_for('historico') }}">Voltar</a></p>
+{% endblock %}
