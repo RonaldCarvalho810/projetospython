@@ -7,8 +7,8 @@ app = Flask(__name__)
 DATABASE = 'licitacoes.db'
 
 # --- Limites atualizados (Decreto nº 12.343/2024) ---
-THRESHOLD_OBRAS = Decimal('125451.15')   # Art.75 I - obras e serviços de engenharia / manutenção de veículos
-THRESHOLD_OUTROS = Decimal('62725.59')   # Art.75 II - outros serviços e compras
+THRESHOLD_OBRAS = Decimal('125451.15')   # Art.75 I
+THRESHOLD_OUTROS = Decimal('62725.59')   # Art.75 II
 # ----------------------------------------------------
 
 def get_db():
@@ -34,7 +34,17 @@ def init_db():
             created_at TEXT
         )
     ''')
+    db.execute('''
+        CREATE TABLE IF NOT EXISTS limites (
+            ano INTEGER PRIMARY KEY,
+            valor_limite REAL
+        )
+    ''')
     db.commit()
+
+@app.before_request
+def before_request():
+    init_db()
 
 @app.teardown_appcontext
 def close_connection(exception):
@@ -43,7 +53,6 @@ def close_connection(exception):
         db.close()
 
 def parse_decimal(value_str):
-    """Tenta interpretar valor em formatos comuns BR (1.234,56 ou 1234.56)"""
     if not value_str:
         return Decimal('0')
     s = value_str.strip().replace(' ', '')
@@ -57,23 +66,21 @@ def parse_decimal(value_str):
         return Decimal('0')
 
 def analisar(tipo_objeto, valor: Decimal, fornecedor_exclusivo: bool, servico_singular: bool):
-    # Inexigibilidade (art.74)
     if fornecedor_exclusivo:
-        return ("Inexigibilidade", "Art. 74, Lei 14.133/2021 — fornecedor exclusivo")
+        return ("Inexigibilidade", "Art. 74 — fornecedor exclusivo")
     if servico_singular:
-        return ("Inexigibilidade", "Art. 74, Lei 14.133/2021 — serviço de natureza singular / notória especialização")
+        return ("Inexigibilidade", "Art. 74 — serviço de natureza singular")
 
-    # Dispensa por valor (art.75)
     if tipo_objeto in ('obra', 'manutencao_veiculo'):
         if valor < THRESHOLD_OBRAS:
-            return ("Dispensa (Art.75, I)", f"Art. 75, I — valor inferior a R$ {THRESHOLD_OBRAS:,}")
+            return ("Dispensa (Art.75, I)", f"Valor < R$ {THRESHOLD_OBRAS:,}")
         else:
-            return ("Concorrência (obra de maior vulto)", "Lei 14.133/2021 — concorrência para obras de maior valor")
+            return ("Concorrência", "Obra de maior vulto")
     else:
         if valor < THRESHOLD_OUTROS:
-            return ("Dispensa (Art.75, II)", f"Art. 75, II — valor inferior a R$ {THRESHOLD_OUTROS:,}")
+            return ("Dispensa (Art.75, II)", f"Valor < R$ {THRESHOLD_OUTROS:,}")
         else:
-            return ("Pregão (bens/serviços comuns) — modal. preferencial", "Lei 10.520/2002 / Lei 14.133/2021 — pregão para bens/serviços comuns")
+            return ("Pregão", "Bens/serviços comuns")
 
 @app.route('/')
 def index():
@@ -89,7 +96,6 @@ def salvar():
     servico_singular = request.form.get('servico_singular') == 'on'
 
     valor = parse_decimal(valor_str)
-
     resultado, fundamento = analisar(tipo_objeto, valor, fornecedor_exclusivo, servico_singular)
 
     db = get_db()
@@ -98,7 +104,9 @@ def salvar():
         (tipo_objeto, descricao, valor_est, urgencia, fornecedor_exclusivo, servico_singular, resultado, fundamento, created_at)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ''', (
-        tipo_objeto, descricao, float(valor), urgencia, int(fornecedor_exclusivo), int(servico_singular), resultado, fundamento, datetime.now().isoformat()
+        tipo_objeto, descricao, float(valor), urgencia,
+        int(fornecedor_exclusivo), int(servico_singular),
+        resultado, fundamento, datetime.now().isoformat()
     ))
     db.commit()
 
@@ -114,7 +122,39 @@ def historico():
     db = get_db()
     cur = db.execute('SELECT * FROM consultas ORDER BY id DESC')
     rows = cur.fetchall()
-    return render_template('historico.html', rows=rows)
+
+    ano_atual = datetime.now().year
+    total_gasto = sum(row['valor_est'] for row in rows if row['created_at'].startswith(str(ano_atual)))
+
+    cur_limite = db.execute('SELECT valor_limite FROM limites WHERE ano = ?', (ano_atual,))
+    limite_row = cur_limite.fetchone()
+    limite_valor = limite_row['valor_limite'] if limite_row else 0
+
+    saldo = limite_valor - total_gasto
+
+    return render_template('historico.html',
+                           rows=rows,
+                           limite=limite_valor,
+                           total_gasto=total_gasto,
+                           saldo=saldo,
+                           ano=ano_atual)
+
+@app.route('/limite', methods=['GET', 'POST'])
+def limite():
+    ano_atual = datetime.now().year
+    db = get_db()
+
+    if request.method == 'POST':
+        valor = parse_decimal(request.form.get('valor', '0'))
+        db.execute('INSERT OR REPLACE INTO limites (ano, valor_limite) VALUES (?, ?)', (ano_atual, float(valor)))
+        db.commit()
+        return redirect(url_for('historico'))
+
+    cur = db.execute('SELECT valor_limite FROM limites WHERE ano = ?', (ano_atual,))
+    limite_row = cur.fetchone()
+    limite_valor = limite_row['valor_limite'] if limite_row else 0
+
+    return render_template('limite.html', ano=ano_atual, limite=limite_valor)
 
 @app.route('/detalhe/<int:id>')
 def detalhe(id):
