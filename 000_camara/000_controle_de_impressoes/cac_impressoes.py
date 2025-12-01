@@ -934,3 +934,4 @@ class ControleImpressoesApp(App):
 if __name__ == "__main__":
     logging.info("Start app")
     ControleImpressoesApp().run()
+# SOFTWARE DESENVOLVIDO POR RONALD CARVALHO
