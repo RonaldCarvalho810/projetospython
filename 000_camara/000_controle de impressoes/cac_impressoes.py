@@ -1,11 +1,6 @@
 # Controle de Impressões com SISTEMA DE USUÁRIOS COMPLETO
 # Kivy + SQLite
-# Melhorias incluídas:
-# - Contagem automática de impressões do cliente:
-#       • no dia atual
-#       • na semana corrente
-#       • no mês corrente
-#   (ao selecionar o cliente)
+# Correção: contagem diária, semanal (segunda→domingo) e mensal ao selecionar cliente
 
 import os
 import sqlite3
@@ -15,7 +10,6 @@ from datetime import datetime, timedelta
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import NumericProperty
 
 DB_FILE = 'impressoes.db'
 SALT_BYTES = 16
@@ -396,6 +390,11 @@ class RegistrarImpressaoScreen(Screen):
 
     def cliente_selecionado(self, text):
         if not text or "|" not in text:
+            # reset labels
+            self.ids.lbl_total.text = 'Impressões do cliente: 0'
+            self.ids.lbl_dia.text = 'Hoje: 0'
+            self.ids.lbl_semana.text = 'Semana: 0'
+            self.ids.lbl_mes.text = 'Mês: 0'
             return
 
         cid = int(text.split("|")[0])
@@ -407,41 +406,42 @@ class RegistrarImpressaoScreen(Screen):
         total = cur.fetchone()[0] or 0
         self.ids.lbl_total.text = f"Impressões do cliente: {total}"
 
-        hoje = datetime.now().strftime('%d/%m/%Y')
+        agora = datetime.now()
 
-        # Dia
+        # Dia (compara apenas a parte data em YYYY-MM-DD)
+        hoje_sql = agora.date().isoformat()  # 'YYYY-MM-DD'
         cur.execute("""
-            SELECT SUM(quantidade) FROM impressoes
-            WHERE cliente_id = ? AND substr(data_hora, 1, 10) = ?
-        """, (cid, hoje))
+            SELECT SUM(quantidade)
+            FROM impressoes
+            WHERE cliente_id = ?
+              AND date(substr(data_hora,7,4) || '-' || substr(data_hora,4,2) || '-' || substr(data_hora,1,2)) = date(?)
+        """, (cid, hoje_sql))
         dia = cur.fetchone()[0] or 0
         self.ids.lbl_dia.text = f"Hoje: {dia}"
 
-        # Semana
-        agora = datetime.now()
-        ini_sem = (agora - timedelta(days=agora.weekday())).strftime('%d/%m/%Y')
-        fim_sem = (agora + timedelta(days=6-agora.weekday())).strftime('%d/%m/%Y')
+        # Semana: calcular início (segunda) e fim (domingo) em YYYY-MM-DD
+        inicio_sem = (agora - timedelta(days=agora.weekday())).date().isoformat()
+        fim_sem = (agora + timedelta(days=(6 - agora.weekday()))).date().isoformat()
 
         cur.execute("""
             SELECT SUM(quantidade)
             FROM impressoes
             WHERE cliente_id = ?
-            AND date(substr(data_hora,7,4)||'-'||substr(data_hora,4,2)||'-'||substr(data_hora,1,2))
-                BETWEEN date(?) AND date(?)
-        """, (cid, ini_sem, fim_sem))
+              AND date(substr(data_hora,7,4) || '-' || substr(data_hora,4,2) || '-' || substr(data_hora,1,2))
+                  BETWEEN date(?) AND date(?)
+        """, (cid, inicio_sem, fim_sem))
         semana = cur.fetchone()[0] or 0
         self.ids.lbl_semana.text = f"Semana: {semana}"
 
-        # Mês
-        ano = agora.strftime('%Y')
-        mes = agora.strftime('%m')
-
+        # Mês: comparar mês e ano
+        mes_atual = agora.strftime('%m')
+        ano_atual = agora.strftime('%Y')
         cur.execute("""
-            SELECT SUM(quantidade) FROM impressoes
+            SELECT SUM(quantidade)
+            FROM impressoes
             WHERE cliente_id = ?
-            AND substr(data_hora, 4, 2) = ?
-            AND substr(data_hora, 7, 4) = ?
-        """, (cid, mes, ano))
+              AND substr(data_hora,4,2) = ? AND substr(data_hora,7,4) = ?
+        """, (cid, mes_atual, ano_atual))
         mes_count = cur.fetchone()[0] or 0
         self.ids.lbl_mes.text = f"Mês: {mes_count}"
 
@@ -461,12 +461,17 @@ class RegistrarImpressaoScreen(Screen):
             self.ids.lbl_total.text = "Preencha os campos."
             return
 
-        qtd = int(quantidade)
+        try:
+            qtd = int(quantidade)
+        except:
+            self.ids.lbl_total.text = "Quantidade inválida."
+            return
+
         if qtd <= 0:
             self.ids.lbl_total.text = "Quantidade inválida."
             return
 
-        usuario = App.get_running_app().usuario_logado
+        usuario = App.get_running_app().usuario_logado or 'desconhecido'
         data_hora = datetime.now().strftime(FORMATO_DATA)
 
         conn = get_conn()
@@ -478,7 +483,8 @@ class RegistrarImpressaoScreen(Screen):
         conn.commit()
         conn.close()
 
-        self.cliente_selecionado(text)
+        # Atualiza contagens ao registrar
+        self.cliente_selecionado(self.ids.spinner_clientes.text)
         self.ids.impressora.text = ''
         self.ids.quantidade.text = ''
 
