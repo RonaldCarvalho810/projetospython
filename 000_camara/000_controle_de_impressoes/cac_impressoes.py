@@ -1,6 +1,7 @@
 # cac_impressoes.py
 # Sistema de Controle de Impressões (único arquivo, KV embutido)
 # Requer: kivy, python 3.8+
+# Salve este arquivo na pasta onde ficará o EXE; o banco (impressoes.db) será criado ali.
 
 import os
 import sys
@@ -13,17 +14,17 @@ from datetime import datetime, timedelta, date
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.clock import Clock
-from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.properties import StringProperty
+from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 
 # ---------- Window (opcional) ----------
 Window.size = (1000, 700)
 
-# ---------- logging ----------
+# ---------- paths & logging ----------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_FILE = os.path.join(BASE_DIR, "impressoes.db")
 LOG_FILE = os.path.join(BASE_DIR, "app.log")
+
 logging.basicConfig(filename=LOG_FILE, level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(message)s")
 logging.info("Aplicativo iniciando")
@@ -776,7 +777,7 @@ class ControleImpressoesApp(App):
     nome_usuario = None
 
     def build(self):
-        # cria DB e admin
+        # cria DB e admin (se necessário)
         criar_tabelas_e_admin_padrao()
         # carregar KV root antes de manipular screens
         root = Builder.load_string(KV)
