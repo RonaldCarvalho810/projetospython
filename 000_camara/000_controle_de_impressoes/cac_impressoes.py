@@ -1,9 +1,9 @@
-# controle_impressoes_final.py
+# cac_impressoes.py
 # Controle de Impressões com SISTEMA DE USUÁRIOS COMPLETO
-# - compatível para empacotar com PyInstaller --windowed --onefile
-# - banco (impressoes.db) ficará no mesmo diretório do EXE
-# - logs para arquivo app.log
-# - PRAGMA journal_mode=WAL ativado automaticamente
+# Compatível com PyInstaller --windowed --onefile
+# DB fica no mesmo diretório do EXE
+# Proteção stdout/stderr + logging em arquivo
+# Correção: preencher Spinner do login com schedule (evita KeyError)
 
 import sys
 import os
@@ -22,7 +22,7 @@ if not hasattr(sys, "stdout") or sys.stdout is None:
 if not hasattr(sys, "stderr") or sys.stderr is None:
     sys.stderr = _DevNull()
 
-# --- logging para arquivo (não usa console) ---
+# --- logging para arquivo ---
 import logging
 LOG_FILE = "app.log"
 logging.basicConfig(
@@ -36,9 +36,9 @@ logging.info("Aplicação iniciando...")
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.clock import Clock
 
 # ---------------- configuração do caminho do banco ----------------
-# base_dir será a pasta do executável (quando empacotado) ou a pasta do .py (em desenvolvimento)
 if getattr(sys, "frozen", False):
     base_dir = os.path.dirname(sys.executable)
 else:
@@ -53,11 +53,10 @@ FORMATO_DATA = "%d/%m/%Y %H:%M"
 
 def get_conn():
     conn = sqlite3.connect(DB_FILE)
-    # garantir WAL (mais seguro para múltiplos acessos em rede)
     try:
         conn.execute("PRAGMA journal_mode=WAL;")
     except Exception:
-        pass
+        logging.exception("PRAGMA WAL falhou")
     return conn
 
 def criar_tabelas_e_admin_padrao():
@@ -93,19 +92,23 @@ def criar_tabelas_e_admin_padrao():
     ''')
     conn.commit()
 
-    cur.execute("SELECT COUNT(*) FROM users")
-    if cur.fetchone()[0] == 0:
-        username = "admin"
-        senha = "admin123"
-        salt = os.urandom(SALT_BYTES)
-        hash_bytes = hashlib.pbkdf2_hmac("sha256", senha.encode("utf-8"), salt, PBKDF2_ITER)
-        cur.execute(
-            "INSERT INTO users (username, password_hash, salt, role, nome) VALUES (?, ?, ?, ?, ?)",
-            (username, binascii.hexlify(hash_bytes).decode(), binascii.hexlify(salt).decode(), "admin", "Administrador"),
-        )
-        conn.commit()
-        logging.info("Usuário admin criado (padrão).")
-    conn.close()
+    try:
+        cur.execute("SELECT COUNT(*) FROM users")
+        if cur.fetchone()[0] == 0:
+            username = "admin"
+            senha = "admin123"
+            salt = os.urandom(SALT_BYTES)
+            hash_bytes = hashlib.pbkdf2_hmac("sha256", senha.encode("utf-8"), salt, PBKDF2_ITER)
+            cur.execute(
+                "INSERT INTO users (username, password_hash, salt, role, nome) VALUES (?, ?, ?, ?, ?)",
+                (username, binascii.hexlify(hash_bytes).decode(), binascii.hexlify(salt).decode(), "admin", "Administrador"),
+            )
+            conn.commit()
+            logging.info("Usuário admin criado (padrão).")
+    except Exception:
+        logging.exception("Erro ao criar admin padrão")
+    finally:
+        conn.close()
 
 def gerar_hash_senha(senha, salt_hex=None):
     if salt_hex:
@@ -134,33 +137,40 @@ ScreenManager:
         orientation: 'vertical'
         padding: 24
         spacing: 12
+
         Label:
             text: 'Controle de Impressões - Login'
             font_size: 22
             size_hint_y: None
             height: 40
-        TextInput:
-            id: username
-            hint_text: 'Usuário'
-            multiline: False
+
+        Spinner:
+            id: combo_users
+            text: 'Selecione o usuário'
+            values: []
+            size_hint_y: None
+            height: 44
+
         TextInput:
             id: password
             hint_text: 'Senha'
             password: True
             multiline: False
+
         Label:
             id: lbl_msg
             text: ''
             size_hint_y: None
             height: 24
             color: 1,0,0,1
+
         BoxLayout:
             size_hint_y: None
             height: 48
             spacing: 8
             Button:
                 text: 'Entrar'
-                on_release: root.action_login(username.text, password.text)
+                on_release: root.action_login(combo_users.text, password.text)
             Button:
                 text: 'Sair'
                 on_release: app.stop()
@@ -171,6 +181,7 @@ ScreenManager:
         orientation: 'vertical'
         padding: 12
         spacing: 8
+
         BoxLayout:
             size_hint_y: None
             height: 40
@@ -183,6 +194,7 @@ ScreenManager:
                 size_hint_x: None
                 width: 100
                 on_release: root.action_logout()
+
         BoxLayout:
             size_hint_y: None
             height: 44
@@ -196,10 +208,12 @@ ScreenManager:
             Button:
                 text: 'Gerenciar Usuários'
                 on_release: app.root.current = 'usuarios'
+
         Label:
             text: 'Últimos registros:'
             size_hint_y: None
             height: 28
+
         ScrollView:
             GridLayout:
                 id: grid_registros
@@ -215,18 +229,22 @@ ScreenManager:
         orientation: 'vertical'
         padding: 12
         spacing: 8
+
         Label:
             text: 'Cadastro de Cliente'
             size_hint_y: None
             height: 38
+
         TextInput:
             id: nome_cliente
             hint_text: 'Nome do cliente'
             multiline: False
+
         TextInput:
             id: contato_cliente
             hint_text: 'Contato (opcional)'
             multiline: False
+
         BoxLayout:
             size_hint_y: None
             height: 44
@@ -247,10 +265,12 @@ ScreenManager:
         orientation: 'vertical'
         padding: 12
         spacing: 8
+
         Label:
             text: 'Registrar Impressão'
             size_hint_y: None
             height: 36
+
         Spinner:
             id: spinner_clientes
             text: 'Selecione um cliente'
@@ -258,6 +278,7 @@ ScreenManager:
             size_hint_y: None
             height: 44
             on_text: root.cliente_selecionado(self.text)
+
         Label:
             id: lbl_total
             text: 'Impressões do cliente: 0'
@@ -286,6 +307,7 @@ ScreenManager:
             id: impressora
             hint_text: 'Impressora'
             multiline: False
+
         TextInput:
             id: quantidade
             hint_text: 'Quantidade de páginas'
@@ -309,10 +331,12 @@ ScreenManager:
         orientation: 'vertical'
         padding: 12
         spacing: 8
+
         Label:
             text: 'Gestão de Usuários (admin)'
             size_hint_y: None
             height: 36
+
         BoxLayout:
             size_hint_y: None
             height: 36
@@ -332,6 +356,7 @@ ScreenManager:
                 values: ['admin','user']
                 size_hint_x: None
                 width: 120
+
         BoxLayout:
             size_hint_y: None
             height: 44
@@ -342,9 +367,11 @@ ScreenManager:
             Button:
                 text: 'Voltar'
                 on_release: app.root.current = 'main'
+
         Label:
             id: status_user
             text: ''
+
         ScrollView:
             GridLayout:
                 id: grid_users
@@ -358,24 +385,59 @@ ScreenManager:
 # ----------------- Telas -----------------
 
 class LoginScreen(Screen):
+    def on_pre_enter(self, *args):
+        # schedule to run after widgets are built to avoid KeyError on ids
+        Clock.schedule_once(self._carregar_usuarios_safe, 0)
+
+    def _carregar_usuarios_safe(self, dt):
+        self.carregar_usuarios()
+
+    def carregar_usuarios(self):
+        try:
+            conn = get_conn()
+            cur = conn.cursor()
+            cur.execute("SELECT username FROM users ORDER BY username")
+            rows = cur.fetchall()
+            conn.close()
+            users = [r[0] for r in rows] if rows else []
+        except Exception:
+            logging.exception("Erro ao carregar usuários")
+            users = []
+
+        spinner = self.ids.get("combo_users")
+        if spinner:
+            try:
+                spinner.values = users
+                spinner.text = 'Selecione o usuário' if users else 'Nenhum usuário'
+            except Exception:
+                logging.exception("Erro ao preencher spinner combo_users")
+        else:
+            logging.warning("combo_users não encontrado em ids do LoginScreen")
+
     def action_login(self, username, password):
-        if not username or not password:
-            self.ids.lbl_msg.text = 'Preencha usuário e senha.'
+        if not username or username == "Selecione o usuário" or username == "Nenhum usuário":
+            self.ids.lbl_msg.text = "Escolha um usuário."
             return
+
+        if not password:
+            self.ids.lbl_msg.text = 'Digite a senha.'
+            return
+
         try:
             conn = get_conn()
             cur = conn.cursor()
             cur.execute('SELECT username, password_hash, salt, role, nome FROM users WHERE username = ?', (username,))
             row = cur.fetchone()
             conn.close()
-        except Exception as e:
+        except Exception:
             logging.exception("Erro ao consultar usuário")
-            self.ids.lbl_msg.text = 'Erro ao acessar banco.'
+            self.ids.lbl_msg.text = 'Erro no banco.'
             return
 
         if not row:
             self.ids.lbl_msg.text = 'Usuário não encontrado.'
             return
+
         _, phash, salt, role, nome = row
         if verificar_senha(password, phash, salt):
             app = App.get_running_app()
@@ -388,10 +450,14 @@ class LoginScreen(Screen):
             self.ids.lbl_msg.text = 'Senha incorreta.'
 
 class MainScreen(Screen):
-    def on_pre_enter(self):
+    def on_pre_enter(self, *args):
         app = App.get_running_app()
         self.ids.lbl_usuario.text = f'Usuário: {getattr(app, "nome_usuario", app.usuario_logado)}'
         self.carregar_ultimos()
+
+    def action_logout(self):
+        App.get_running_app().usuario_logado = None
+        App.get_running_app().root.current = "login"
 
     def carregar_ultimos(self):
         grid = self.ids.grid_registros
@@ -408,7 +474,7 @@ class MainScreen(Screen):
             ''')
             rows = cur.fetchall()
             conn.close()
-        except Exception as e:
+        except Exception:
             logging.exception("Erro ao carregar últimos registros")
             from kivy.uix.label import Label
             grid.add_widget(Label(text='Erro ao carregar registros.', size_hint_y=None, height=40))
@@ -418,6 +484,7 @@ class MainScreen(Screen):
             from kivy.uix.label import Label
             grid.add_widget(Label(text='Nenhum registro ainda.', size_hint_y=None, height=40))
             return
+
         from kivy.uix.boxlayout import BoxLayout
         from kivy.uix.label import Label
         for r in rows:
@@ -436,7 +503,7 @@ class CadastroClienteScreen(Screen):
         try:
             conn = get_conn()
             cur = conn.cursor()
-            cur.execute('INSERT INTO clientes (nome, contato) VALUES (?, ?)', (nome, contato if contato else None))
+            cur.execute('INSERT INTO clientes (nome, contato) VALUES (?, ?)', (nome, contato or None))
             conn.commit()
             conn.close()
             self.ids.status_cliente.text = 'Cliente cadastrado.'
@@ -444,13 +511,14 @@ class CadastroClienteScreen(Screen):
             self.ids.contato_cliente.text = ''
         except sqlite3.IntegrityError:
             self.ids.status_cliente.text = 'Cliente já existe.'
-        except Exception as e:
+        except Exception:
             logging.exception("Erro ao salvar cliente")
             self.ids.status_cliente.text = 'Erro ao salvar cliente.'
 
 class RegistrarImpressaoScreen(Screen):
-    def on_pre_enter(self):
-        self.carregar_clientes_spinner()
+    def on_pre_enter(self, *args):
+        # preencher spinner de clientes quando a tela for exibida
+        Clock.schedule_once(lambda dt: self.carregar_clientes_spinner(), 0)
         self.ids.impressora.text = ''
         self.ids.quantidade.text = ''
         self.ids.lbl_total.text = 'Impressões do cliente: 0'
@@ -465,19 +533,22 @@ class RegistrarImpressaoScreen(Screen):
             cur.execute('SELECT id, nome FROM clientes ORDER BY nome')
             rows = cur.fetchall()
             conn.close()
-        except Exception as e:
+        except Exception:
             logging.exception("Erro ao carregar clientes")
             rows = []
 
-        if rows:
-            self.ids.spinner_clientes.values = [f"{r[0]}|{r[1]}" for r in rows]
+        spinner = self.ids.get("spinner_clientes")
+        if spinner:
+            try:
+                spinner.values = [f"{r[0]}|{r[1]}" for r in rows] if rows else []
+                spinner.text = 'Selecione um cliente' if rows else 'Nenhum cliente'
+            except Exception:
+                logging.exception("Erro ao preencher spinner_clientes")
         else:
-            self.ids.spinner_clientes.values = []
-        self.ids.spinner_clientes.text = 'Selecione um cliente'
+            logging.warning("spinner_clientes não encontrado em ids de RegistrarImpressaoScreen")
 
     def cliente_selecionado(self, text):
-        if not text or "|" not in text:
-            # reset labels
+        if "|" not in text:
             self.ids.lbl_total.text = 'Impressões do cliente: 0'
             self.ids.lbl_dia.text = 'Hoje: 0'
             self.ids.lbl_semana.text = 'Semana: 0'
@@ -499,8 +570,8 @@ class RegistrarImpressaoScreen(Screen):
 
         agora = datetime.now()
 
-        # Dia (compara apenas a parte data em YYYY-MM-DD)
-        hoje_sql = agora.date().isoformat()  # 'YYYY-MM-DD'
+        # Dia
+        hoje_sql = agora.date().isoformat()
         cur.execute("""
             SELECT SUM(quantidade)
             FROM impressoes
@@ -510,10 +581,9 @@ class RegistrarImpressaoScreen(Screen):
         dia = cur.fetchone()[0] or 0
         self.ids.lbl_dia.text = f"Hoje: {dia}"
 
-        # Semana: início (segunda) e fim (domingo)
+        # Semana (segunda -> domingo)
         inicio_sem = (agora - timedelta(days=agora.weekday())).date().isoformat()
         fim_sem = (agora + timedelta(days=(6 - agora.weekday()))).date().isoformat()
-
         cur.execute("""
             SELECT SUM(quantidade)
             FROM impressoes
@@ -524,7 +594,7 @@ class RegistrarImpressaoScreen(Screen):
         semana = cur.fetchone()[0] or 0
         self.ids.lbl_semana.text = f"Semana: {semana}"
 
-        # Mês: comparar mês e ano
+        # Mês
         mes_atual = agora.strftime('%m')
         ano_atual = agora.strftime('%Y')
         cur.execute("""
@@ -540,7 +610,7 @@ class RegistrarImpressaoScreen(Screen):
 
     def registrar_impressao(self):
         text = self.ids.spinner_clientes.text
-        if not text or "|" not in text:
+        if "|" not in text:
             self.ids.lbl_total.text = "Selecione um cliente válido."
             return
 
@@ -554,77 +624,98 @@ class RegistrarImpressaoScreen(Screen):
 
         try:
             qtd = int(quantidade)
-        except:
+            if qtd <= 0:
+                raise ValueError()
+        except Exception:
             self.ids.lbl_total.text = "Quantidade inválida."
             return
 
-        if qtd <= 0:
-            self.ids.lbl_total.text = "Quantidade inválida."
-            return
-
-        usuario = App.get_running_app().usuario_logado or 'desconhecido'
+        usuario = App.get_running_app().usuario_logado or "desconhecido"
         data_hora = datetime.now().strftime(FORMATO_DATA)
 
         try:
             conn = get_conn()
             cur = conn.cursor()
-            cur.execute(
-                "INSERT INTO impressoes (cliente_id, usuario, impressora, quantidade, data_hora) VALUES (?, ?, ?, ?, ?)",
-                (cid, usuario, impressora, qtd, data_hora)
-            )
+            cur.execute("""
+                INSERT INTO impressoes (cliente_id, usuario, impressora, quantidade, data_hora)
+                VALUES (?, ?, ?, ?, ?)
+            """, (cid, usuario, impressora, qtd, data_hora))
             conn.commit()
             conn.close()
         except Exception:
             logging.exception("Erro ao inserir impressão")
             self.ids.lbl_total.text = "Erro ao gravar."
+            return
 
-        # Atualiza contagens ao registrar
-        self.cliente_selecionado(self.ids.spinner_clientes.text)
+        # Atualiza contagens
+        Clock.schedule_once(lambda dt: self.cliente_selecionado(self.ids.spinner_clientes.text), 0)
         self.ids.impressora.text = ''
         self.ids.quantidade.text = ''
 
 class GerenciarUsuariosScreen(Screen):
-    def on_pre_enter(self):
+    def on_pre_enter(self, *args):
         app = App.get_running_app()
-        if app.role != 'admin':
-            self.ids.status_user.text = 'Acesso negado.'
+        if app.role != "admin":
+            # Se não for admin, mostramos mensagem simples
+            try:
+                self.ids.status_user.text = "Acesso negado."
+            except Exception:
+                pass
             return
-        self.carregar_usuarios()
+        Clock.schedule_once(lambda dt: self.carregar_usuarios(), 0)
 
     def criar_usuario(self, username, senha, role):
         username = username.strip()
         senha = senha.strip()
         if not username or not senha:
-            self.ids.status_user.text = 'Preencha todos os campos.'
+            try:
+                self.ids.status_user.text = "Preencha todos os campos."
+            except Exception:
+                pass
             return
 
         phash, salt = gerar_hash_senha(senha)
-
         conn = get_conn()
         cur = conn.cursor()
         try:
-            cur.execute("INSERT INTO users (username, password_hash, salt, role, nome) VALUES (?, ?, ?, ?, ?)",
-                        (username, phash, salt, role, username))
+            cur.execute("""
+                INSERT INTO users (username, password_hash, salt, role, nome)
+                VALUES (?, ?, ?, ?, ?)
+            """, (username, phash, salt, role, username))
             conn.commit()
-            self.ids.status_user.text = 'Usuário criado.'
+            try:
+                self.ids.status_user.text = "Usuário criado."
+            except Exception:
+                pass
             self.carregar_usuarios()
-        except:
+        except Exception:
             logging.exception("Erro ao criar usuário")
-            self.ids.status_user.text = 'Erro ou usuário já existe.'
+            try:
+                self.ids.status_user.text = "Erro ou usuário já existe."
+            except Exception:
+                pass
         finally:
             conn.close()
 
     def carregar_usuarios(self):
-        conn = get_conn()
-        cur = conn.cursor()
-        cur.execute("SELECT username, role FROM users ORDER BY username")
-        rows = cur.fetchall()
-        conn.close()
-        grid = self.ids.grid_users
+        try:
+            conn = get_conn()
+            cur = conn.cursor()
+            cur.execute("SELECT username, role FROM users ORDER BY username")
+            rows = cur.fetchall()
+            conn.close()
+        except Exception:
+            logging.exception("Erro ao buscar usuários")
+            rows = []
+
+        grid = self.ids.get("grid_users")
+        if grid is None:
+            logging.warning("grid_users não encontrado")
+            return
         grid.clear_widgets()
         from kivy.uix.label import Label
         for r in rows:
-            grid.add_widget(Label(text=f'{r[0]} — {r[1]}', size_hint_y=None, height=36))
+            grid.add_widget(Label(text=f"{r[0]} — {r[1]}", size_hint_y=None, height=36))
 
 # ----------------- App -----------------
 
