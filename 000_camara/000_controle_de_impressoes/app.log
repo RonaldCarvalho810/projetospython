@@ -13,3 +13,17 @@
 2025-12-03 15:37:20,628 INFO Aplicação pronta. DB em: c:\vex\Ronald_python\projetospython\000_camara\000_controle_de_impressoes\impressoes.db
 2025-12-03 15:37:20,628 INFO Base: Start application main loop
 2025-12-03 15:37:21,788 INFO Base: Leaving application in progress...
+2025-12-03 15:49:44,604 INFO Aplicativo iniciando (arquivo de log).
+2025-12-03 15:49:44,605 INFO Start app
+2025-12-03 15:49:44,620 INFO Text: Provider: sdl2
+2025-12-03 15:49:44,641 INFO GL: NPOT texture support is available
+2025-12-03 15:49:44,670 INFO Aplicação pronta. DB em: c:\vex\Ronald_python\projetospython\000_camara\000_controle_de_impressoes\impressoes.db
+2025-12-03 15:49:44,670 INFO Base: Start application main loop
+2025-12-03 15:49:57,506 INFO Base: Leaving application in progress...
+2025-12-03 15:50:27,596 INFO Aplicativo iniciando (arquivo de log).
+2025-12-03 15:50:27,597 INFO Start app
+2025-12-03 15:50:27,611 INFO Text: Provider: sdl2
+2025-12-03 15:50:27,631 INFO GL: NPOT texture support is available
+2025-12-03 15:50:27,657 INFO Aplicação pronta. DB em: c:\vex\Ronald_python\projetospython\000_camara\000_controle_de_impressoes\impressoes.db
+2025-12-03 15:50:27,658 INFO Base: Start application main loop
+2025-12-03 15:50:56,076 INFO Base: Leaving application in progress...

@@ -18,7 +18,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 
 # ---------- Window (opcional) ----------
-Window.size = (800, 600)
+Window.size = (600, 600)
 
 # ---------- paths & logging ----------
 BASE_DIR = os.path.dirname(getattr(sys, '_MEIPASS', os.path.abspath(__file__)))
