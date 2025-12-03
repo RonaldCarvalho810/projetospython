@@ -25,8 +25,12 @@ BASE_DIR = os.path.dirname(getattr(sys, '_MEIPASS', os.path.abspath(__file__)))
 DB_FILE = os.path.join(BASE_DIR, "impressoes.db")
 LOG_FILE = os.path.join(BASE_DIR, "app.log")
 
+# Keep a reference to any fallback devnull file to avoid GC closing it.
+_DEVNULL_FH = None
+
 # configuração de logging robusta para .exe sem console
 def setup_logging():
+    global _DEVNULL_FH
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
@@ -43,8 +47,16 @@ def setup_logging():
 
     formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
 
+    # Certificar que base dir existe (embora já exista normalmente)
+    try:
+        os.makedirs(BASE_DIR, exist_ok=True)
+    except Exception:
+        # se não conseguir criar, seguimos (fallback tratará)
+        pass
+
     # 1) tentar abrir arquivo de log
     try:
+        # Garante que arquivo possa ser criado (dir ok)
         fh = logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8')
         fh.setFormatter(formatter)
         logger.addHandler(fh)
@@ -53,7 +65,19 @@ def setup_logging():
         return
     except Exception:
         # se falhar, seguir para fallback
-        pass
+        try:
+            # se falhou por permissão no arquivo, tentamos criar diretório 'logs' ao lado
+            logs_dir = os.path.join(BASE_DIR, "logs")
+            os.makedirs(logs_dir, exist_ok=True)
+            alt_log = os.path.join(logs_dir, "app.log")
+            fh = logging.FileHandler(alt_log, mode='a', encoding='utf-8')
+            fh.setFormatter(formatter)
+            logger.addHandler(fh)
+            logger.propagate = False
+            logger.info("Aplicativo iniciando (arquivo de log alternativo).")
+            return
+        except Exception:
+            pass
 
     # 2) tentar escrever em stderr válido (sys.__stderr__ costuma existir mesmo em exe GUI)
     stream_obj = None
@@ -66,29 +90,26 @@ def setup_logging():
         stream_obj = None
 
     # 2b) se stderr inválido, abrir devnull como fallback (garante um stream com write)
-    devnull_file = None
     try:
         if stream_obj is None:
-            # abrir devnull em modo texto (mantemos referência para evitar GC fechar logo)
-            devnull_file = open(os.devnull, 'w', encoding='utf-8', errors='ignore')
-            stream_obj = devnull_file
-        sh = logging.StreamHandler(stream_obj)
-        sh.setFormatter(formatter)
-        logger.addHandler(sh)
-        logger.propagate = False
-        logger.info("Aplicativo iniciando (stderr/devnull).")
-        # NOTA: não fechamos devnull_file aqui — manter referência evita erros de stream None
-        return
+            # abrir devnull em modo texto (mantemos referência global para evitar GC fechar)
+            try:
+                _DEVNULL_FH = open(os.devnull, 'w', encoding='utf-8', errors='ignore')
+                stream_obj = _DEVNULL_FH
+            except Exception:
+                _DEVNULL_FH = None
+                stream_obj = None
+
+        if stream_obj is not None:
+            sh = logging.StreamHandler(stream_obj)
+            sh.setFormatter(formatter)
+            logger.addHandler(sh)
+            logger.propagate = False
+            logger.info("Aplicativo iniciando (stderr/devnull).")
+            # NOTA: não fechamos _DEVNULL_FH; mantemos referência global.
+            return
     except Exception:
-        # se tudo falhar, prosseguir para NullHandler
-        try:
-            if devnull_file:
-                try:
-                    devnull_file.close()
-                except Exception:
-                    pass
-        except Exception:
-            pass
+        pass
 
     # 3) último recurso: NullHandler (evita exceções em emit)
     try:
