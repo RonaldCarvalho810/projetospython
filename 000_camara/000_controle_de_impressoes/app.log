@@ -1,8 +1,0 @@
-2025-12-03 14:24:10,428 INFO Aplicativo iniciando (arquivo de log).
-2025-12-03 14:24:10,429 INFO Start app
-2025-12-03 14:24:10,490 INFO Operador admin criado (padrão)
-2025-12-03 14:24:10,504 INFO Text: Provider: sdl2
-2025-12-03 14:24:10,523 INFO GL: NPOT texture support is available
-2025-12-03 14:24:10,548 INFO Aplicação pronta. DB em: c:\vex\Ronald_python\projetospython\000_camara\000_controle_de_impressoes\impressoes.db
-2025-12-03 14:24:10,548 INFO Base: Start application main loop
-2025-12-03 14:24:12,538 INFO Base: Leaving application in progress...
