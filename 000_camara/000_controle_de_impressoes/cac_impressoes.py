@@ -18,16 +18,88 @@ from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 
 # ---------- Window (opcional) ----------
-Window.size = (1000, 700)
+Window.size = (800, 600)
 
 # ---------- paths & logging ----------
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(getattr(sys, '_MEIPASS', os.path.abspath(__file__)))
 DB_FILE = os.path.join(BASE_DIR, "impressoes.db")
 LOG_FILE = os.path.join(BASE_DIR, "app.log")
 
-logging.basicConfig(filename=LOG_FILE, level=logging.INFO,
-                    format="%(asctime)s %(levelname)s %(message)s")
-logging.info("Aplicativo iniciando")
+# configuração de logging robusta para .exe sem console
+def setup_logging():
+    logger = logging.getLogger()
+    logger.setLevel(logging.INFO)
+
+    # remover handlers existentes (evita duplicação em reloads) e fechar streams
+    for h in list(logger.handlers):
+        try:
+            logger.removeHandler(h)
+        except Exception:
+            pass
+        try:
+            h.close()
+        except Exception:
+            pass
+
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+
+    # 1) tentar abrir arquivo de log
+    try:
+        fh = logging.FileHandler(LOG_FILE, mode='a', encoding='utf-8')
+        fh.setFormatter(formatter)
+        logger.addHandler(fh)
+        logger.propagate = False
+        logger.info("Aplicativo iniciando (arquivo de log).")
+        return
+    except Exception:
+        # se falhar, seguir para fallback
+        pass
+
+    # 2) tentar escrever em stderr válido (sys.__stderr__ costuma existir mesmo em exe GUI)
+    stream_obj = None
+    try:
+        # preferir sys.__stderr__ quando existe e não está fechado
+        cand = getattr(sys, '__stderr__', None) or getattr(sys, 'stderr', None)
+        if cand and hasattr(cand, 'write') and not getattr(cand, 'closed', False):
+            stream_obj = cand
+    except Exception:
+        stream_obj = None
+
+    # 2b) se stderr inválido, abrir devnull como fallback (garante um stream com write)
+    devnull_file = None
+    try:
+        if stream_obj is None:
+            # abrir devnull em modo texto (mantemos referência para evitar GC fechar logo)
+            devnull_file = open(os.devnull, 'w', encoding='utf-8', errors='ignore')
+            stream_obj = devnull_file
+        sh = logging.StreamHandler(stream_obj)
+        sh.setFormatter(formatter)
+        logger.addHandler(sh)
+        logger.propagate = False
+        logger.info("Aplicativo iniciando (stderr/devnull).")
+        # NOTA: não fechamos devnull_file aqui — manter referência evita erros de stream None
+        return
+    except Exception:
+        # se tudo falhar, prosseguir para NullHandler
+        try:
+            if devnull_file:
+                try:
+                    devnull_file.close()
+                except Exception:
+                    pass
+        except Exception:
+            pass
+
+    # 3) último recurso: NullHandler (evita exceções em emit)
+    try:
+        logger.addHandler(logging.NullHandler())
+        logger.propagate = False
+    except Exception:
+        # nada a fazer - garantir que não exploda
+        pass
+
+# inicializa logging
+setup_logging()
 
 # ---------- security params ----------
 SALT_BYTES = 16

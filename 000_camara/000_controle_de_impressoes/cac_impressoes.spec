@@ -5,7 +5,7 @@ a = Analysis(
     ['cac_impressoes.py'],
     pathex=[],
     binaries=[],
-    datas=[('impressoes.db', '.')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
