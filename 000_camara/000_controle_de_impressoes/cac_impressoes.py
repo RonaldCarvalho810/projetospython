@@ -21,7 +21,13 @@ from kivy.core.window import Window
 Window.size = (600, 600)
 
 # ---------- paths & logging ----------
-BASE_DIR = os.path.dirname(getattr(sys, '_MEIPASS', os.path.abspath(__file__)))
+if getattr(sys, 'frozen', False):
+    # Executando como EXE
+    BASE_DIR = os.path.dirname(sys.executable)
+else:
+    # Executando como script .py
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 DB_FILE = os.path.join(BASE_DIR, "impressoes.db")
 LOG_FILE = os.path.join(BASE_DIR, "app.log")
 
